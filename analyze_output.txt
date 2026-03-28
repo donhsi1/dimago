@@ -1,0 +1,916 @@
+Resolving dependencies...
+Downloading packages...
+  archive 3.6.1 (4.0.9 available)
+  file_picker 8.3.7 (10.3.10 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_local_notifications 17.2.4 (21.0.0 available)
+  flutter_local_notifications_linux 4.0.1 (8.0.0 available)
+  flutter_local_notifications_platform_interface 7.2.0 (11.0.0 available)
+  google_sign_in 6.3.0 (7.2.0 available)
+  google_sign_in_android 6.2.1 (7.2.10 available)
+  google_sign_in_ios 5.9.0 (6.3.0 available)
+  google_sign_in_platform_interface 2.5.0 (3.1.0 available)
+  google_sign_in_web 0.12.4+4 (1.1.3 available)
+  lints 5.1.1 (6.1.0 available)
+  meta 1.17.0 (1.18.2 available)
+  record 5.2.1 (6.2.0 available)
+! record_linux 1.3.0 (overridden)
+  test_api 0.7.10 (0.7.11 available)
+  timezone 0.9.4 (0.11.0 available)
+  vector_math 2.2.0 (2.3.0 available)
+  win32 5.15.0 (6.0.0 available)
+Got dependencies!
+18 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing lango...                                              
+
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\add_word_page.dart:523:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\api_stats_page.dart:130:59 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\dictionary_list_page.dart:213:25 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\dictionary_list_page.dart:214:25 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block - lib\dictionary_list_page.dart:264:37 - curly_braces_in_flow_control_structures
+  error - Expected to find ';' - lib\dictionary_list_page.dart:264:44 - expected_token
+  error - Unterminated string literal - lib\dictionary_list_page.dart:264:47 - unterminated_string_literal
+  error - Conditions must have a static type of 'bool' - lib\dictionary_list_page.dart:342:81 - non_bool_condition
+  error - Unable to decode bytes as UTF-8 - lib\dictionary_list_page.dart:342:88 - encoding
+  error - Expected an identifier - lib\dictionary_list_page.dart:342:90 - missing_identifier
+  error - Expected to find ':' - lib\dictionary_list_page.dart:342:90 - expected_token
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\dictionary_list_page.dart:527:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\dictionary_list_page.dart:574:35 - deprecated_member_use
+  error - Expected to find ':' - lib\dictionary_list_page.dart:608:89 - expected_token
+  error - Illegal character '20174' - lib\dictionary_list_page.dart:608:89 - illegal_character
+  error - Undefined name '从高到低' - lib\dictionary_list_page.dart:608:89 - undefined_identifier
+  error - Illegal character '39640' - lib\dictionary_list_page.dart:608:90 - illegal_character
+  error - Illegal character '21040' - lib\dictionary_list_page.dart:608:91 - illegal_character
+  error - Illegal character '20302' - lib\dictionary_list_page.dart:608:92 - illegal_character
+  error - Illegal character '26368' - lib\dictionary_list_page.dart:608:96 - illegal_character
+  error - Undefined name '最新优' - lib\dictionary_list_page.dart:608:96 - undefined_identifier
+  error - Illegal character '26032' - lib\dictionary_list_page.dart:608:97 - illegal_character
+  error - Illegal character '20248' - lib\dictionary_list_page.dart:608:98 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\dictionary_list_page.dart:608:99 - encoding
+  error - Expected an identifier - lib\dictionary_list_page.dart:608:101 - missing_identifier
+  error - Expected to find ':' - lib\dictionary_list_page.dart:608:101 - expected_token
+  error - Expected to find ':' - lib\dictionary_list_page.dart:609:88 - expected_token
+  error - Illegal character '20174' - lib\dictionary_list_page.dart:609:88 - illegal_character
+  error - Undefined name '从低到高' - lib\dictionary_list_page.dart:609:88 - undefined_identifier
+  error - Illegal character '20302' - lib\dictionary_list_page.dart:609:89 - illegal_character
+  error - Illegal character '21040' - lib\dictionary_list_page.dart:609:90 - illegal_character
+  error - Illegal character '39640' - lib\dictionary_list_page.dart:609:91 - illegal_character
+  error - Illegal character '26368' - lib\dictionary_list_page.dart:609:95 - illegal_character
+  error - Undefined name '最旧优' - lib\dictionary_list_page.dart:609:95 - undefined_identifier
+  error - Illegal character '26087' - lib\dictionary_list_page.dart:609:96 - illegal_character
+  error - Illegal character '20248' - lib\dictionary_list_page.dart:609:97 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\dictionary_list_page.dart:609:98 - encoding
+  error - Expected an identifier - lib\dictionary_list_page.dart:609:100 - missing_identifier
+  error - Expected to find ':' - lib\dictionary_list_page.dart:609:100 - expected_token
+  error - Expected to find ':' - lib\dictionary_list_page.dart:645:77 - expected_token
+  error - Illegal character '25353' - lib\dictionary_list_page.dart:645:77 - illegal_character
+  error - Undefined name '按答对次数排' - lib\dictionary_list_page.dart:645:77 - undefined_identifier
+  error - Illegal character '31572' - lib\dictionary_list_page.dart:645:78 - illegal_character
+  error - Illegal character '23545' - lib\dictionary_list_page.dart:645:79 - illegal_character
+  error - Illegal character '27425' - lib\dictionary_list_page.dart:645:80 - illegal_character
+  error - Illegal character '25968' - lib\dictionary_list_page.dart:645:81 - illegal_character
+  error - Illegal character '25490' - lib\dictionary_list_page.dart:645:82 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\dictionary_list_page.dart:645:83 - encoding
+  error - Expected an identifier - lib\dictionary_list_page.dart:645:85 - missing_identifier
+  error - Expected to find ':' - lib\dictionary_list_page.dart:645:85 - expected_token
+  error - Expected to find ':' - lib\dictionary_list_page.dart:647:79 - expected_token
+  error - Illegal character '25353' - lib\dictionary_list_page.dart:647:79 - illegal_character
+  error - Undefined name '按词条创建时间排' - lib\dictionary_list_page.dart:647:79 - undefined_identifier
+  error - Illegal character '35789' - lib\dictionary_list_page.dart:647:80 - illegal_character
+  error - Illegal character '26465' - lib\dictionary_list_page.dart:647:81 - illegal_character
+  error - Illegal character '21019' - lib\dictionary_list_page.dart:647:82 - illegal_character
+  error - Illegal character '24314' - lib\dictionary_list_page.dart:647:83 - illegal_character
+  error - Illegal character '26102' - lib\dictionary_list_page.dart:647:84 - illegal_character
+  error - Illegal character '38388' - lib\dictionary_list_page.dart:647:85 - illegal_character
+  error - Illegal character '25490' - lib\dictionary_list_page.dart:647:86 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\dictionary_list_page.dart:647:87 - encoding
+  error - Expected an identifier - lib\dictionary_list_page.dart:647:89 - missing_identifier
+  error - Expected to find ':' - lib\dictionary_list_page.dart:647:89 - expected_token
+  error - Expected to find ':' - lib\dictionary_list_page.dart:649:84 - expected_token
+  error - Illegal character '25353' - lib\dictionary_list_page.dart:649:84 - illegal_character
+  error - Undefined name '按最后练习时间排' - lib\dictionary_list_page.dart:649:84 - undefined_identifier
+  error - Illegal character '26368' - lib\dictionary_list_page.dart:649:85 - illegal_character
+  error - Illegal character '21518' - lib\dictionary_list_page.dart:649:86 - illegal_character
+  error - Illegal character '32451' - lib\dictionary_list_page.dart:649:87 - illegal_character
+  error - Illegal character '20064' - lib\dictionary_list_page.dart:649:88 - illegal_character
+  error - Illegal character '26102' - lib\dictionary_list_page.dart:649:89 - illegal_character
+  error - Illegal character '38388' - lib\dictionary_list_page.dart:649:90 - illegal_character
+  error - Illegal character '25490' - lib\dictionary_list_page.dart:649:91 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\dictionary_list_page.dart:649:92 - encoding
+  error - Expected an identifier - lib\dictionary_list_page.dart:649:94 - missing_identifier
+  error - Expected to find ':' - lib\dictionary_list_page.dart:649:94 - expected_token
+  error - Unterminated string literal - lib\dictionary_list_page.dart:798:44 - unterminated_string_literal
+  error - Expected to find ',' - lib\dictionary_list_page.dart:799:23 - expected_token
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\dictionary_list_page.dart:835:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\dictionary_list_page.dart:838:54 - deprecated_member_use
+  error - Expected to find ';' - lib\import_page.dart:85:40 - expected_token
+  error - Unterminated string literal - lib\import_page.dart:85:50 - unterminated_string_literal
+  error - Expected to find ')' - lib\import_page.dart:86:9 - expected_token
+   info - Statements in an if should be enclosed in a block - lib\import_page.dart:134:26 - curly_braces_in_flow_control_structures
+  error - Expected to find ';' - lib\import_page.dart:134:42 - expected_token
+  error - Unterminated string literal - lib\import_page.dart:134:52 - unterminated_string_literal
+  error - Expected to find ')' - lib\import_page.dart:136:7 - expected_token
+  error - Expected to find ':' - lib\import_page.dart:160:55 - expected_token
+  error - Illegal character '23548' - lib\import_page.dart:160:55 - illegal_character
+  error - Undefined name '导入完成：新' - lib\import_page.dart:160:55 - undefined_identifier
+  error - Illegal character '20837' - lib\import_page.dart:160:56 - illegal_character
+  error - Illegal character '23436' - lib\import_page.dart:160:57 - illegal_character
+  error - Illegal character '25104' - lib\import_page.dart:160:58 - illegal_character
+  error - Illegal character '65306' - lib\import_page.dart:160:59 - illegal_character
+  error - Illegal character '26032' - lib\import_page.dart:160:60 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\import_page.dart:160:61 - encoding
+  error - Undefined name '$ins' - lib\import_page.dart:160:63 - undefined_identifier
+  error - Expected to find ':' - lib\import_page.dart:160:68 - expected_token
+  error - Illegal character '26465' - lib\import_page.dart:160:68 - illegal_character
+  error - Undefined name '条，跳过重复' - lib\import_page.dart:160:68 - undefined_identifier
+  error - Illegal character '65292' - lib\import_page.dart:160:69 - illegal_character
+  error - Illegal character '36339' - lib\import_page.dart:160:70 - illegal_character
+  error - Illegal character '36807' - lib\import_page.dart:160:71 - illegal_character
+  error - Illegal character '37325' - lib\import_page.dart:160:72 - illegal_character
+  error - Illegal character '22797' - lib\import_page.dart:160:73 - illegal_character
+  error - Expected to find ')' - lib\import_page.dart:160:75 - expected_token
+  error - Unable to decode bytes as UTF-8 - lib\import_page.dart:160:80 - encoding
+  error - Expected to find ';' - lib\import_page.dart:185:69 - expected_token
+  error - Unterminated string literal - lib\import_page.dart:185:78 - unterminated_string_literal
+  error - Expected to find ')' - lib\import_page.dart:186:5 - expected_token
+  error - Expected to find ':' - lib\import_page.dart:189:66 - expected_token
+  error - Illegal character '27888' - lib\import_page.dart:189:66 - illegal_character
+  error - Undefined name '泰语' - lib\import_page.dart:189:66 - undefined_identifier
+  error - Illegal character '35821' - lib\import_page.dart:189:67 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\import_page.dart:189:68 - encoding
+  error - Expected an identifier - lib\import_page.dart:189:70 - missing_identifier
+  error - Expected to find ':' - lib\import_page.dart:189:70 - expected_token
+  error - Expected to find ':' - lib\import_page.dart:190:72 - expected_token
+  error - Illegal character '20013' - lib\import_page.dart:190:72 - illegal_character
+  error - Undefined name '中文' - lib\import_page.dart:190:72 - undefined_identifier
+  error - Illegal character '25991' - lib\import_page.dart:190:73 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\import_page.dart:190:74 - encoding
+  error - Expected an identifier - lib\import_page.dart:190:76 - missing_identifier
+  error - Expected to find ':' - lib\import_page.dart:190:76 - expected_token
+  error - Expected to find ':' - lib\import_page.dart:192:116 - expected_token
+  error - Expected to find ';' - lib\import_page.dart:192:116 - expected_token
+  error - Illegal character '25152' - lib\import_page.dart:192:116 - illegal_character
+  error - Undefined name '所选列无数据，请调整列设置' - lib\import_page.dart:192:116 - undefined_identifier
+  error - Illegal character '36873' - lib\import_page.dart:192:117 - illegal_character
+  error - Illegal character '21015' - lib\import_page.dart:192:118 - illegal_character
+  error - Illegal character '26080' - lib\import_page.dart:192:119 - illegal_character
+  error - Illegal character '25968' - lib\import_page.dart:192:120 - illegal_character
+  error - Illegal character '25454' - lib\import_page.dart:192:121 - illegal_character
+  error - Illegal character '65292' - lib\import_page.dart:192:122 - illegal_character
+  error - Illegal character '35831' - lib\import_page.dart:192:123 - illegal_character
+  error - Illegal character '35843' - lib\import_page.dart:192:124 - illegal_character
+  error - Illegal character '25972' - lib\import_page.dart:192:125 - illegal_character
+  error - Illegal character '21015' - lib\import_page.dart:192:126 - illegal_character
+  error - Illegal character '35774' - lib\import_page.dart:192:127 - illegal_character
+  error - Illegal character '32622' - lib\import_page.dart:192:128 - illegal_character
+  error - Expected to find ')' - lib\import_page.dart:192:129 - expected_token
+  error - Expected to find ';' - lib\import_page.dart:192:129 - expected_token
+  error - Unterminated string literal - lib\import_page.dart:192:131 - unterminated_string_literal
+  error - Expected to find ';' - lib\import_page.dart:193:64 - expected_token
+  error - Unterminated string literal - lib\import_page.dart:193:71 - unterminated_string_literal
+  error - Expected to find ')' - lib\import_page.dart:194:5 - expected_token
+  error - Expected to find ':' - lib\import_page.dart:194:57 - expected_token
+  error - Illegal character '21295' - lib\import_page.dart:194:57 - illegal_character
+  error - Undefined name '匯入中' - lib\import_page.dart:194:57 - undefined_identifier
+  error - Illegal character '20837' - lib\import_page.dart:194:58 - illegal_character
+  error - Illegal character '20013' - lib\import_page.dart:194:59 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\import_page.dart:194:60 - encoding
+  error - Expected an identifier - lib\import_page.dart:194:63 - missing_identifier
+  error - Expected to find ';' - lib\import_page.dart:194:65 - expected_token
+  error - Unterminated string literal - lib\import_page.dart:194:72 - unterminated_string_literal
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\import_page.dart:263:17 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\import_page.dart:302:58 - deprecated_member_use
+  error - Unterminated string literal - lib\import_page.dart:304:82 - unterminated_string_literal
+  error - Expected to find ',' - lib\import_page.dart:305:25 - expected_token
+  error - Too many positional arguments: 0 expected, but 1 found - lib\import_page.dart:305:25 - extra_positional_arguments_could_be_named
+  error - Expected to find ')' - lib\import_page.dart:306:23 - expected_token
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\import_page.dart:414:11 - deprecated_member_use
+   info - Angle brackets will be interpreted as HTML - lib\lang_db_service.dart:67:55 - unintended_html_in_doc_comment
+  error - The named parameter 'flag' is required, but there's no corresponding argument - lib\language_prefs.dart:29:3 - missing_required_argument
+  error - Arguments of a constant creation must be constant expressions - lib\language_prefs.dart:29:72 - const_with_non_constant_argument
+  error - Expected to find ',' - lib\language_prefs.dart:29:72 - expected_token
+  error - Illegal character '55356' - lib\language_prefs.dart:29:72 - illegal_character
+  error - Too many positional arguments: 0 expected, but 4 found - lib\language_prefs.dart:29:72 - extra_positional_arguments_could_be_named
+  error - Undefined name '🇨🇳' - lib\language_prefs.dart:29:72 - undefined_identifier
+  error - Illegal character '56808' - lib\language_prefs.dart:29:73 - illegal_character
+  error - Illegal character '55356' - lib\language_prefs.dart:29:74 - illegal_character
+  error - Illegal character '56819' - lib\language_prefs.dart:29:75 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:29:76 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:29:78 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:30:3 - expected_token
+  error - The named parameter 'flag' is required, but there's no corresponding argument - lib\language_prefs.dart:31:3 - missing_required_argument
+  error - Arguments of a constant creation must be constant expressions - lib\language_prefs.dart:31:58 - const_with_non_constant_argument
+  error - Expected to find ',' - lib\language_prefs.dart:31:58 - expected_token
+  error - Illegal character '55356' - lib\language_prefs.dart:31:58 - illegal_character
+  error - Too many positional arguments: 0 expected, but 8 found - lib\language_prefs.dart:31:58 - extra_positional_arguments_could_be_named
+  error - Undefined name '🇹🇭' - lib\language_prefs.dart:31:58 - undefined_identifier
+  error - Illegal character '56825' - lib\language_prefs.dart:31:59 - illegal_character
+  error - Illegal character '55356' - lib\language_prefs.dart:31:60 - illegal_character
+  error - Illegal character '56813' - lib\language_prefs.dart:31:61 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:31:62 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:31:64 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:32:3 - expected_token
+  error - The named parameter 'flag' is required, but there's no corresponding argument - lib\language_prefs.dart:37:3 - missing_required_argument
+  error - Arguments of a constant creation must be constant expressions - lib\language_prefs.dart:37:58 - const_with_non_constant_argument
+  error - Expected to find ',' - lib\language_prefs.dart:37:58 - expected_token
+  error - Illegal character '55356' - lib\language_prefs.dart:37:58 - illegal_character
+  error - Too many positional arguments: 0 expected, but 3 found - lib\language_prefs.dart:37:58 - extra_positional_arguments_could_be_named
+  error - Undefined name '🇯🇵' - lib\language_prefs.dart:37:58 - undefined_identifier
+  error - Illegal character '56815' - lib\language_prefs.dart:37:59 - illegal_character
+  error - Illegal character '55356' - lib\language_prefs.dart:37:60 - illegal_character
+  error - Illegal character '56821' - lib\language_prefs.dart:37:61 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:37:62 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:37:64 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:38:3 - expected_token
+  error - The named parameter 'flag' is required, but there's no corresponding argument - lib\language_prefs.dart:38:3 - missing_required_argument
+  error - Arguments of a constant creation must be constant expressions - lib\language_prefs.dart:38:56 - const_with_non_constant_argument
+  error - Expected to find ',' - lib\language_prefs.dart:38:56 - expected_token
+  error - Illegal character '55356' - lib\language_prefs.dart:38:56 - illegal_character
+  error - Too many positional arguments: 0 expected, but 3 found - lib\language_prefs.dart:38:56 - extra_positional_arguments_could_be_named
+  error - Undefined name '🇰🇷' - lib\language_prefs.dart:38:56 - undefined_identifier
+  error - Illegal character '56816' - lib\language_prefs.dart:38:57 - illegal_character
+  error - Illegal character '55356' - lib\language_prefs.dart:38:58 - illegal_character
+  error - Illegal character '56823' - lib\language_prefs.dart:38:59 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:38:60 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:38:62 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:39:3 - expected_token
+  error - The named parameter 'flag' is required, but there's no corresponding argument - lib\language_prefs.dart:39:3 - missing_required_argument
+  error - Arguments of a constant creation must be constant expressions - lib\language_prefs.dart:39:60 - const_with_non_constant_argument
+  error - Expected to find ',' - lib\language_prefs.dart:39:60 - expected_token
+  error - Illegal character '55356' - lib\language_prefs.dart:39:60 - illegal_character
+  error - Too many positional arguments: 0 expected, but 5 found - lib\language_prefs.dart:39:60 - extra_positional_arguments_could_be_named
+  error - Undefined name '🇲🇲' - lib\language_prefs.dart:39:60 - undefined_identifier
+  error - Illegal character '56818' - lib\language_prefs.dart:39:61 - illegal_character
+  error - Illegal character '55356' - lib\language_prefs.dart:39:62 - illegal_character
+  error - Illegal character '56818' - lib\language_prefs.dart:39:63 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:39:64 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:39:66 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:40:3 - expected_token
+  error - Expected to find ')' - lib\language_prefs.dart:43:1 - expected_token
+warning - The declaration '<unnamed>' isn't referenced - lib\language_prefs.dart:96:7 - unused_element
+  error - Expected to find ',' - lib\language_prefs.dart:119:39 - expected_token
+  error - Illegal character '36864' - lib\language_prefs.dart:119:39 - illegal_character
+  error - Undefined name '退' - lib\language_prefs.dart:119:39 - undefined_identifier
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:119:40 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:119:42 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:119:42 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:124:52 - expected_token
+  error - Illegal character '30332' - lib\language_prefs.dart:124:52 - illegal_character
+  error - Undefined name '發音速度與聲' - lib\language_prefs.dart:124:52 - undefined_identifier
+  error - Illegal character '38899' - lib\language_prefs.dart:124:53 - illegal_character
+  error - Illegal character '36895' - lib\language_prefs.dart:124:54 - illegal_character
+  error - Illegal character '24230' - lib\language_prefs.dart:124:55 - illegal_character
+  error - Illegal character '33287' - lib\language_prefs.dart:124:56 - illegal_character
+  error - Illegal character '32882' - lib\language_prefs.dart:124:57 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:124:58 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:124:60 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:124:60 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:130:53 - expected_token
+  error - Illegal character '20171' - lib\language_prefs.dart:130:53 - illegal_character
+  error - Undefined name '介面、翻譯源、母' - lib\language_prefs.dart:130:53 - undefined_identifier
+  error - Illegal character '38754' - lib\language_prefs.dart:130:54 - illegal_character
+  error - Illegal character '12289' - lib\language_prefs.dart:130:55 - illegal_character
+  error - Illegal character '32763' - lib\language_prefs.dart:130:56 - illegal_character
+  error - Illegal character '35695' - lib\language_prefs.dart:130:57 - illegal_character
+  error - Illegal character '28304' - lib\language_prefs.dart:130:58 - illegal_character
+  error - Illegal character '12289' - lib\language_prefs.dart:130:59 - illegal_character
+  error - Illegal character '27597' - lib\language_prefs.dart:130:60 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:130:61 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:130:63 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:130:63 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:135:52 - expected_token
+  error - Illegal character '27888' - lib\language_prefs.dart:135:52 - illegal_character
+  error - Undefined name '泰語目前僅支援女' - lib\language_prefs.dart:135:52 - undefined_identifier
+  error - Illegal character '35486' - lib\language_prefs.dart:135:53 - illegal_character
+  error - Illegal character '30446' - lib\language_prefs.dart:135:54 - illegal_character
+  error - Illegal character '21069' - lib\language_prefs.dart:135:55 - illegal_character
+  error - Illegal character '20677' - lib\language_prefs.dart:135:56 - illegal_character
+  error - Illegal character '25903' - lib\language_prefs.dart:135:57 - illegal_character
+  error - Illegal character '25588' - lib\language_prefs.dart:135:58 - illegal_character
+  error - Illegal character '22899' - lib\language_prefs.dart:135:59 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:135:60 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:135:62 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:135:62 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:144:47 - expected_token
+  error - Illegal character '26368' - lib\language_prefs.dart:144:47 - illegal_character
+  error - Undefined name '最高訪問次' - lib\language_prefs.dart:144:47 - undefined_identifier
+  error - Illegal character '39640' - lib\language_prefs.dart:144:48 - illegal_character
+  error - Illegal character '35370' - lib\language_prefs.dart:144:49 - illegal_character
+  error - Illegal character '21839' - lib\language_prefs.dart:144:50 - illegal_character
+  error - Illegal character '27425' - lib\language_prefs.dart:144:51 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:144:52 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:144:54 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:144:54 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:145:56 - expected_token
+  error - Illegal character '29105' - lib\language_prefs.dart:145:56 - illegal_character
+  error - Undefined name '熱度紅杠以此為滿格基' - lib\language_prefs.dart:145:56 - undefined_identifier
+  error - Illegal character '24230' - lib\language_prefs.dart:145:57 - illegal_character
+  error - Illegal character '32005' - lib\language_prefs.dart:145:58 - illegal_character
+  error - Illegal character '26464' - lib\language_prefs.dart:145:59 - illegal_character
+  error - Illegal character '20197' - lib\language_prefs.dart:145:60 - illegal_character
+  error - Illegal character '27492' - lib\language_prefs.dart:145:61 - illegal_character
+  error - Illegal character '28858' - lib\language_prefs.dart:145:62 - illegal_character
+  error - Illegal character '28415' - lib\language_prefs.dart:145:63 - illegal_character
+  error - Illegal character '26684' - lib\language_prefs.dart:145:64 - illegal_character
+  error - Illegal character '22522' - lib\language_prefs.dart:145:65 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:145:66 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:145:68 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:145:68 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:149:47 - expected_token
+  error - Illegal character '38283' - lib\language_prefs.dart:149:47 - illegal_character
+  error - Undefined name '開始時間' - lib\language_prefs.dart:149:47 - undefined_identifier
+  error - Illegal character '22987' - lib\language_prefs.dart:149:48 - illegal_character
+  error - Illegal character '26178' - lib\language_prefs.dart:149:49 - illegal_character
+  error - Illegal character '38291' - lib\language_prefs.dart:149:50 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:149:51 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:149:55 - expected_token
+  error - Too many positional arguments: 3 expected, but 9 found - lib\language_prefs.dart:149:55 - extra_positional_arguments
+  error - Undefined name 'Start' - lib\language_prefs.dart:149:55 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:149:61 - expected_token
+  error - Undefined name 'Time' - lib\language_prefs.dart:149:61 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:149:65 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:149:67 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:150:3 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:150:10 - expected_token
+  error - Undefined name 'get' - lib\language_prefs.dart:150:10 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:150:14 - expected_token
+  error - Expected to find ';' - lib\language_prefs.dart:150:14 - expected_token
+  error - Undefined name 'notifEndTime' - lib\language_prefs.dart:150:14 - undefined_identifier
+  error - Expected an identifier - lib\language_prefs.dart:150:27 - missing_identifier
+  error - Expected to find ')' - lib\language_prefs.dart:150:27 - expected_token
+  error - Methods must have an explicit list of parameters - lib\language_prefs.dart:150:27 - missing_method_parameters
+  error - Expected to find ',' - lib\language_prefs.dart:151:46 - expected_token
+  error - Illegal character '25512' - lib\language_prefs.dart:151:46 - illegal_character
+  error - Undefined name '推送間' - lib\language_prefs.dart:151:46 - undefined_identifier
+  error - Illegal character '36865' - lib\language_prefs.dart:151:47 - illegal_character
+  error - Illegal character '38291' - lib\language_prefs.dart:151:48 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:151:49 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:151:51 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:151:51 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:152:63 - expected_token
+  error - Illegal character '26410' - lib\language_prefs.dart:152:63 - illegal_character
+  error - Undefined name '未取得通知權限，請在系統設定中手動開啟' - lib\language_prefs.dart:152:63 - undefined_identifier
+  error - Illegal character '21462' - lib\language_prefs.dart:152:64 - illegal_character
+  error - Illegal character '24471' - lib\language_prefs.dart:152:65 - illegal_character
+  error - Illegal character '36890' - lib\language_prefs.dart:152:66 - illegal_character
+  error - Illegal character '30693' - lib\language_prefs.dart:152:67 - illegal_character
+  error - Illegal character '27402' - lib\language_prefs.dart:152:68 - illegal_character
+  error - Illegal character '38480' - lib\language_prefs.dart:152:69 - illegal_character
+  error - Illegal character '65292' - lib\language_prefs.dart:152:70 - illegal_character
+  error - Illegal character '35531' - lib\language_prefs.dart:152:71 - illegal_character
+  error - Illegal character '22312' - lib\language_prefs.dart:152:72 - illegal_character
+  error - Illegal character '31995' - lib\language_prefs.dart:152:73 - illegal_character
+  error - Illegal character '32113' - lib\language_prefs.dart:152:74 - illegal_character
+  error - Illegal character '35373' - lib\language_prefs.dart:152:75 - illegal_character
+  error - Illegal character '23450' - lib\language_prefs.dart:152:76 - illegal_character
+  error - Illegal character '20013' - lib\language_prefs.dart:152:77 - illegal_character
+  error - Illegal character '25163' - lib\language_prefs.dart:152:78 - illegal_character
+  error - Illegal character '21205' - lib\language_prefs.dart:152:79 - illegal_character
+  error - Illegal character '38283' - lib\language_prefs.dart:152:80 - illegal_character
+  error - Illegal character '21855' - lib\language_prefs.dart:152:81 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:152:82 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:152:86 - expected_token
+  error - Too many positional arguments: 3 expected, but 13 found - lib\language_prefs.dart:152:86 - extra_positional_arguments
+  error - Expected to find ',' - lib\language_prefs.dart:152:99 - expected_token
+  error - Undefined name 'permission' - lib\language_prefs.dart:152:99 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:152:110 - expected_token
+  error - Undefined name 'denied' - lib\language_prefs.dart:152:110 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:152:125 - expected_token
+  error - Undefined name 'it' - lib\language_prefs.dart:152:125 - undefined_identifier
+  error - 'in' can't be used as an identifier because it's a keyword - lib\language_prefs.dart:152:128 - expected_identifier_but_got_keyword
+  error - Expected to find ',' - lib\language_prefs.dart:152:128 - expected_token
+  error - Undefined name 'in' - lib\language_prefs.dart:152:128 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:152:131 - expected_token
+  error - Undefined name 'system' - lib\language_prefs.dart:152:131 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:152:138 - expected_token
+  error - Expected an identifier - lib\language_prefs.dart:152:147 - missing_identifier
+  error - The getter '');'' isn't defined for the type 'String' - lib\language_prefs.dart:152:147 - undefined_getter
+  error - Unterminated string literal - lib\language_prefs.dart:152:149 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:153:3 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:153:10 - expected_token
+  error - Undefined name 'get' - lib\language_prefs.dart:153:10 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:153:14 - expected_token
+  error - Expected to find ';' - lib\language_prefs.dart:153:14 - expected_token
+  error - Undefined name 'notifExactTitle' - lib\language_prefs.dart:153:14 - undefined_identifier
+  error - Expected an identifier - lib\language_prefs.dart:153:30 - missing_identifier
+  error - Expected to find ')' - lib\language_prefs.dart:153:30 - expected_token
+  error - Methods must have an explicit list of parameters - lib\language_prefs.dart:153:30 - missing_method_parameters
+  error - Expected to find ',' - lib\language_prefs.dart:153:55 - expected_token
+  error - Illegal character '38656' - lib\language_prefs.dart:153:55 - illegal_character
+  error - Undefined name '需要「鬧鐘和提醒」權' - lib\language_prefs.dart:153:55 - undefined_identifier
+  error - Illegal character '35201' - lib\language_prefs.dart:153:56 - illegal_character
+  error - Illegal character '12300' - lib\language_prefs.dart:153:57 - illegal_character
+  error - Illegal character '39719' - lib\language_prefs.dart:153:58 - illegal_character
+  error - Illegal character '37912' - lib\language_prefs.dart:153:59 - illegal_character
+  error - Illegal character '21644' - lib\language_prefs.dart:153:60 - illegal_character
+  error - Illegal character '25552' - lib\language_prefs.dart:153:61 - illegal_character
+  error - Illegal character '37266' - lib\language_prefs.dart:153:62 - illegal_character
+  error - Illegal character '12301' - lib\language_prefs.dart:153:63 - illegal_character
+  error - Illegal character '27402' - lib\language_prefs.dart:153:64 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:153:65 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:153:67 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:153:67 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:155:83 - unterminated_string_literal
+  error - Unterminated string literal - lib\language_prefs.dart:156:83 - unterminated_string_literal
+  error - 3 positional arguments expected by '_pick', but 1 found - lib\language_prefs.dart:157:198 - not_enough_positional_arguments
+  error - Expected to find ',' - lib\language_prefs.dart:158:47 - expected_token
+  error - Illegal character '21435' - lib\language_prefs.dart:158:47 - illegal_character
+  error - Undefined name '去開' - lib\language_prefs.dart:158:47 - undefined_identifier
+  error - Illegal character '38283' - lib\language_prefs.dart:158:48 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:158:49 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:158:51 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:158:51 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:161:50 - expected_token
+  error - Illegal character '23559' - lib\language_prefs.dart:161:50 - illegal_character
+  error - Undefined name '將在' - lib\language_prefs.dart:161:50 - undefined_identifier
+  error - Illegal character '22312' - lib\language_prefs.dart:161:51 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:161:53 - expected_token
+  error - Undefined name '$start' - lib\language_prefs.dart:161:53 - undefined_identifier
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:161:60 - encoding
+  error - Undefined name '$end' - lib\language_prefs.dart:161:62 - undefined_identifier
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:161:67 - encoding
+  error - Undefined name '$min' - lib\language_prefs.dart:161:69 - undefined_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:161:74 - expected_token
+  error - Illegal character '20998' - lib\language_prefs.dart:161:74 - illegal_character
+  error - Undefined name '分鐘推送一個詞' - lib\language_prefs.dart:161:74 - undefined_identifier
+  error - Illegal character '37912' - lib\language_prefs.dart:161:75 - illegal_character
+  error - Illegal character '25512' - lib\language_prefs.dart:161:76 - illegal_character
+  error - Illegal character '36865' - lib\language_prefs.dart:161:77 - illegal_character
+  error - Illegal character '19968' - lib\language_prefs.dart:161:78 - illegal_character
+  error - Illegal character '20491' - lib\language_prefs.dart:161:79 - illegal_character
+  error - Illegal character '35422' - lib\language_prefs.dart:161:80 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:161:81 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:161:83 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:161:83 - expected_token
+  error - Too many positional arguments: 3 expected, but 4 found - lib\language_prefs.dart:161:85 - extra_positional_arguments
+  error - Expected to find ',' - lib\language_prefs.dart:162:63 - expected_token
+  error - Illegal character '38283' - lib\language_prefs.dart:162:63 - illegal_character
+  error - Undefined name '開啟後將在指定時間段內定時推送詞' - lib\language_prefs.dart:162:63 - undefined_identifier
+  error - Illegal character '21855' - lib\language_prefs.dart:162:64 - illegal_character
+  error - Illegal character '24460' - lib\language_prefs.dart:162:65 - illegal_character
+  error - Illegal character '23559' - lib\language_prefs.dart:162:66 - illegal_character
+  error - Illegal character '22312' - lib\language_prefs.dart:162:67 - illegal_character
+  error - Illegal character '25351' - lib\language_prefs.dart:162:68 - illegal_character
+  error - Illegal character '23450' - lib\language_prefs.dart:162:69 - illegal_character
+  error - Illegal character '26178' - lib\language_prefs.dart:162:70 - illegal_character
+  error - Illegal character '38291' - lib\language_prefs.dart:162:71 - illegal_character
+  error - Illegal character '27573' - lib\language_prefs.dart:162:72 - illegal_character
+  error - Illegal character '20839' - lib\language_prefs.dart:162:73 - illegal_character
+  error - Illegal character '23450' - lib\language_prefs.dart:162:74 - illegal_character
+  error - Illegal character '26178' - lib\language_prefs.dart:162:75 - illegal_character
+  error - Illegal character '25512' - lib\language_prefs.dart:162:76 - illegal_character
+  error - Illegal character '36865' - lib\language_prefs.dart:162:77 - illegal_character
+  error - Illegal character '35422' - lib\language_prefs.dart:162:78 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:162:79 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:162:81 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:162:81 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:176:48 - expected_token
+  error - Illegal character '39006' - lib\language_prefs.dart:176:48 - illegal_character
+  error - Undefined name '類別' - lib\language_prefs.dart:176:48 - undefined_identifier
+  error - Illegal character '21029' - lib\language_prefs.dart:176:49 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:176:50 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:176:52 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:176:52 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:179:69 - expected_token
+  error - Undefined name 'Select' - lib\language_prefs.dart:179:69 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:179:76 - expected_token
+  error - Too many positional arguments: 3 expected, but 8 found - lib\language_prefs.dart:179:76 - extra_positional_arguments
+  error - Undefined name 'the' - lib\language_prefs.dart:179:76 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:179:80 - expected_token
+  error - Undefined name 'correct' - lib\language_prefs.dart:179:80 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:179:88 - expected_token
+  error - The named parameter 'translation' isn't defined - lib\language_prefs.dart:179:88 - undefined_named_parameter
+  error - Unterminated string literal - lib\language_prefs.dart:179:102 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:180:3 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:180:10 - expected_token
+  error - Undefined name 'get' - lib\language_prefs.dart:180:10 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:180:14 - expected_token
+  error - Expected to find ';' - lib\language_prefs.dart:180:14 - expected_token
+  error - Undefined name 'practiceSelectNative' - lib\language_prefs.dart:180:14 - undefined_identifier
+  error - Expected an identifier - lib\language_prefs.dart:180:35 - missing_identifier
+  error - Expected to find ')' - lib\language_prefs.dart:180:35 - expected_token
+  error - Methods must have an explicit list of parameters - lib\language_prefs.dart:180:35 - missing_method_parameters
+  error - Expected to find ',' - lib\language_prefs.dart:180:71 - expected_token
+  error - Undefined name 'Select' - lib\language_prefs.dart:180:71 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:180:78 - expected_token
+  error - Too many positional arguments: 3 expected, but 8 found - lib\language_prefs.dart:180:78 - extra_positional_arguments
+  error - Undefined name 'the' - lib\language_prefs.dart:180:78 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:180:82 - expected_token
+  error - Undefined name 'correct' - lib\language_prefs.dart:180:82 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:180:90 - expected_token
+  error - The named parameter 'translation' isn't defined - lib\language_prefs.dart:180:90 - undefined_named_parameter
+  error - Unterminated string literal - lib\language_prefs.dart:180:104 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:181:3 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:181:10 - expected_token
+  error - Undefined name 'get' - lib\language_prefs.dart:181:10 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:181:14 - expected_token
+  error - Expected to find ';' - lib\language_prefs.dart:181:14 - expected_token
+  error - Undefined name 'practiceEmpty' - lib\language_prefs.dart:181:14 - undefined_identifier
+  error - Expected an identifier - lib\language_prefs.dart:181:28 - missing_identifier
+  error - Expected to find ')' - lib\language_prefs.dart:181:28 - expected_token
+  error - Methods must have an explicit list of parameters - lib\language_prefs.dart:181:28 - missing_method_parameters
+  error - Expected to find ',' - lib\language_prefs.dart:182:64 - expected_token
+  error - Illegal character '27492' - lib\language_prefs.dart:182:64 - illegal_character
+  error - Undefined name '此類別暫無詞彙，請切換類別或先新增詞' - lib\language_prefs.dart:182:64 - undefined_identifier
+  error - Illegal character '39006' - lib\language_prefs.dart:182:65 - illegal_character
+  error - Illegal character '21029' - lib\language_prefs.dart:182:66 - illegal_character
+  error - Illegal character '26283' - lib\language_prefs.dart:182:67 - illegal_character
+  error - Illegal character '28961' - lib\language_prefs.dart:182:68 - illegal_character
+  error - Illegal character '35422' - lib\language_prefs.dart:182:69 - illegal_character
+  error - Illegal character '24409' - lib\language_prefs.dart:182:70 - illegal_character
+  error - Illegal character '65292' - lib\language_prefs.dart:182:71 - illegal_character
+  error - Illegal character '35531' - lib\language_prefs.dart:182:72 - illegal_character
+  error - Illegal character '20999' - lib\language_prefs.dart:182:73 - illegal_character
+  error - Illegal character '25563' - lib\language_prefs.dart:182:74 - illegal_character
+  error - Illegal character '39006' - lib\language_prefs.dart:182:75 - illegal_character
+  error - Illegal character '21029' - lib\language_prefs.dart:182:76 - illegal_character
+  error - Illegal character '25110' - lib\language_prefs.dart:182:77 - illegal_character
+  error - Illegal character '20808' - lib\language_prefs.dart:182:78 - illegal_character
+  error - Illegal character '26032' - lib\language_prefs.dart:182:79 - illegal_character
+  error - Illegal character '22686' - lib\language_prefs.dart:182:80 - illegal_character
+  error - Illegal character '35422' - lib\language_prefs.dart:182:81 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:182:82 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:182:84 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:182:84 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:189:48 - expected_token
+  error - Illegal character '27794' - lib\language_prefs.dart:189:48 - illegal_character
+  error - Undefined name '沒有符合的詞' - lib\language_prefs.dart:189:48 - undefined_identifier
+  error - Illegal character '26377' - lib\language_prefs.dart:189:49 - illegal_character
+  error - Illegal character '31526' - lib\language_prefs.dart:189:50 - illegal_character
+  error - Illegal character '21512' - lib\language_prefs.dart:189:51 - illegal_character
+  error - Illegal character '30340' - lib\language_prefs.dart:189:52 - illegal_character
+  error - Illegal character '35422' - lib\language_prefs.dart:189:53 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:189:54 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:189:56 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:189:56 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:190:43 - expected_token
+  error - Illegal character '35422' - lib\language_prefs.dart:190:43 - illegal_character
+  error - Undefined name '詞典是空' - lib\language_prefs.dart:190:43 - undefined_identifier
+  error - Illegal character '20856' - lib\language_prefs.dart:190:44 - illegal_character
+  error - Illegal character '26159' - lib\language_prefs.dart:190:45 - illegal_character
+  error - Illegal character '31354' - lib\language_prefs.dart:190:46 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:190:47 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:190:49 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:190:49 - expected_token
+  error - Conditions must have a static type of 'bool' - lib\language_prefs.dart:192:33 - non_bool_condition
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:192:39 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:192:41 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:192:41 - expected_token
+  error - 3 positional arguments expected by '_pick', but 2 found - lib\language_prefs.dart:192:50 - not_enough_positional_arguments
+  error - Expected to find ',' - lib\language_prefs.dart:201:55 - expected_token
+  error - Illegal character '27491' - lib\language_prefs.dart:201:55 - illegal_character
+  error - Undefined name '正在下載語言' - lib\language_prefs.dart:201:55 - undefined_identifier
+  error - Illegal character '22312' - lib\language_prefs.dart:201:56 - illegal_character
+  error - Illegal character '19979' - lib\language_prefs.dart:201:57 - illegal_character
+  error - Illegal character '36617' - lib\language_prefs.dart:201:58 - illegal_character
+  error - Illegal character '35486' - lib\language_prefs.dart:201:59 - illegal_character
+  error - Illegal character '35328' - lib\language_prefs.dart:201:60 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:201:61 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:201:63 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:201:63 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:203:52 - expected_token
+  error - Illegal character '19979' - lib\language_prefs.dart:203:52 - illegal_character
+  error - Undefined name '下載失敗，請檢查網路' - lib\language_prefs.dart:203:52 - undefined_identifier
+  error - Illegal character '36617' - lib\language_prefs.dart:203:53 - illegal_character
+  error - Illegal character '22833' - lib\language_prefs.dart:203:54 - illegal_character
+  error - Illegal character '25943' - lib\language_prefs.dart:203:55 - illegal_character
+  error - Illegal character '65292' - lib\language_prefs.dart:203:56 - illegal_character
+  error - Illegal character '35531' - lib\language_prefs.dart:203:57 - illegal_character
+  error - Illegal character '27298' - lib\language_prefs.dart:203:58 - illegal_character
+  error - Illegal character '26597' - lib\language_prefs.dart:203:59 - illegal_character
+  error - Illegal character '32178' - lib\language_prefs.dart:203:60 - illegal_character
+  error - Illegal character '36335' - lib\language_prefs.dart:203:61 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:203:62 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:203:66 - expected_token
+  error - Too many positional arguments: 3 expected, but 10 found - lib\language_prefs.dart:203:66 - extra_positional_arguments
+  error - Undefined name 'Download' - lib\language_prefs.dart:203:66 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:203:75 - expected_token
+  error - Undefined name 'failed' - lib\language_prefs.dart:203:75 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:203:89 - expected_token
+  error - Undefined name 'your' - lib\language_prefs.dart:203:89 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:203:94 - expected_token
+  error - Undefined name 'connection' - lib\language_prefs.dart:203:94 - undefined_identifier
+  error - Expected an identifier - lib\language_prefs.dart:203:105 - missing_identifier
+  error - Unterminated string literal - lib\language_prefs.dart:203:107 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:204:3 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:204:10 - expected_token
+  error - Undefined name 'get' - lib\language_prefs.dart:204:10 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:204:14 - expected_token
+  error - Expected to find ';' - lib\language_prefs.dart:204:14 - expected_token
+  error - Undefined name 'langPackSetupTitle' - lib\language_prefs.dart:204:14 - undefined_identifier
+  error - Expected an identifier - lib\language_prefs.dart:204:33 - missing_identifier
+  error - Expected to find ')' - lib\language_prefs.dart:204:33 - expected_token
+  error - Methods must have an explicit list of parameters - lib\language_prefs.dart:204:33 - missing_method_parameters
+  error - Expected to find ',' - lib\language_prefs.dart:205:100 - expected_token
+  error - Undefined name 'Select' - lib\language_prefs.dart:205:100 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:107 - expected_token
+  error - Too many positional arguments: 3 expected, but 13 found - lib\language_prefs.dart:205:107 - extra_positional_arguments
+  error - Undefined name 'your' - lib\language_prefs.dart:205:107 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:112 - expected_token
+  error - Undefined name 'learning' - lib\language_prefs.dart:205:112 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:121 - expected_token
+  error - Undefined name 'and' - lib\language_prefs.dart:205:121 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:125 - expected_token
+  error - Undefined name 'native' - lib\language_prefs.dart:205:125 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:132 - expected_token
+  error - Undefined name 'language' - lib\language_prefs.dart:205:132 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:145 - expected_token
+  error - Undefined name 'will' - lib\language_prefs.dart:205:145 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:150 - expected_token
+  error - Undefined name 'download' - lib\language_prefs.dart:205:150 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:159 - expected_token
+  error - Undefined name 'the' - lib\language_prefs.dart:205:159 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:163 - expected_token
+  error - Undefined name 'word' - lib\language_prefs.dart:205:163 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:205:168 - expected_token
+  error - Expected to find ';' - lib\language_prefs.dart:205:168 - expected_token
+  error - Undefined name 'database' - lib\language_prefs.dart:205:168 - undefined_identifier
+  error - Expected a class member - lib\language_prefs.dart:205:177 - expected_class_member
+  error - Expected to find ')' - lib\language_prefs.dart:205:177 - expected_token
+  error - All final variables must be initialized, but 'uiLang' isn't - lib\language_prefs.dart:205:181 - final_not_initialized_constructor
+  error - Methods must have an explicit list of parameters - lib\language_prefs.dart:205:181 - missing_method_parameters
+  error - The name of a constructor must match the name of the enclosing class - lib\language_prefs.dart:205:181 - invalid_constructor_name
+  error - Expected an identifier - lib\language_prefs.dart:205:185 - missing_identifier
+  error - Unterminated string literal - lib\language_prefs.dart:205:187 - unterminated_string_literal
+   info - Empty constructor bodies should be written using a ';' rather than '{}' - lib\language_prefs.dart:206:3 - empty_constructor_bodies
+  error - A function body must be provided - lib\language_prefs.dart:206:3 - missing_function_body
+  error - Expected to find ',' - lib\language_prefs.dart:206:54 - expected_token
+  error - Illegal character '30906' - lib\language_prefs.dart:206:54 - illegal_character
+  error - Undefined name '確定並下' - lib\language_prefs.dart:206:54 - undefined_identifier
+  error - Illegal character '23450' - lib\language_prefs.dart:206:55 - illegal_character
+  error - Illegal character '20006' - lib\language_prefs.dart:206:56 - illegal_character
+  error - Illegal character '19979' - lib\language_prefs.dart:206:57 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:206:58 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:206:60 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:206:60 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:214:41 - expected_token
+  error - Illegal character '19979' - lib\language_prefs.dart:214:41 - illegal_character
+  error - Undefined name '下一' - lib\language_prefs.dart:214:41 - undefined_identifier
+  error - Illegal character '19968' - lib\language_prefs.dart:214:42 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:214:43 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:214:45 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:214:45 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:215:41 - expected_token
+  error - Illegal character '19978' - lib\language_prefs.dart:215:41 - illegal_character
+  error - Undefined name '上一' - lib\language_prefs.dart:215:41 - undefined_identifier
+  error - Illegal character '19968' - lib\language_prefs.dart:215:42 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:215:43 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:215:45 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:215:45 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:216:43 - expected_token
+  error - Illegal character '38283' - lib\language_prefs.dart:216:43 - illegal_character
+  error - Undefined name '開始使用' - lib\language_prefs.dart:216:43 - undefined_identifier
+  error - Illegal character '22987' - lib\language_prefs.dart:216:44 - illegal_character
+  error - Illegal character '20351' - lib\language_prefs.dart:216:45 - illegal_character
+  error - Illegal character '29992' - lib\language_prefs.dart:216:46 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:216:47 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:216:51 - expected_token
+  error - Too many positional arguments: 3 expected, but 9 found - lib\language_prefs.dart:216:51 - extra_positional_arguments
+  error - Undefined name 'Get' - lib\language_prefs.dart:216:51 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:216:55 - expected_token
+  error - Undefined name 'Started' - lib\language_prefs.dart:216:55 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:216:62 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:216:64 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:219:3 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:219:10 - expected_token
+  error - Undefined name 'get' - lib\language_prefs.dart:219:10 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:219:14 - expected_token
+  error - Expected to find ';' - lib\language_prefs.dart:219:14 - expected_token
+  error - Undefined name 'loginWelcome' - lib\language_prefs.dart:219:14 - undefined_identifier
+  error - Expected an identifier - lib\language_prefs.dart:219:27 - missing_identifier
+  error - Expected to find ')' - lib\language_prefs.dart:219:27 - expected_token
+  error - Methods must have an explicit list of parameters - lib\language_prefs.dart:219:27 - missing_method_parameters
+  error - Expected to find ',' - lib\language_prefs.dart:220:55 - expected_token
+  error - Illegal character '30331' - lib\language_prefs.dart:220:55 - illegal_character
+  error - Undefined name '登入以在裝置間同步您的詞' - lib\language_prefs.dart:220:55 - undefined_identifier
+  error - Illegal character '20837' - lib\language_prefs.dart:220:56 - illegal_character
+  error - Illegal character '20197' - lib\language_prefs.dart:220:57 - illegal_character
+  error - Illegal character '22312' - lib\language_prefs.dart:220:58 - illegal_character
+  error - Illegal character '35037' - lib\language_prefs.dart:220:59 - illegal_character
+  error - Illegal character '32622' - lib\language_prefs.dart:220:60 - illegal_character
+  error - Illegal character '38291' - lib\language_prefs.dart:220:61 - illegal_character
+  error - Illegal character '21516' - lib\language_prefs.dart:220:62 - illegal_character
+  error - Illegal character '27493' - lib\language_prefs.dart:220:63 - illegal_character
+  error - Illegal character '24744' - lib\language_prefs.dart:220:64 - illegal_character
+  error - Illegal character '30340' - lib\language_prefs.dart:220:65 - illegal_character
+  error - Illegal character '35422' - lib\language_prefs.dart:220:66 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:220:67 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:220:69 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:220:69 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:227:48 - expected_token
+  error - Illegal character '25163' - lib\language_prefs.dart:227:48 - illegal_character
+  error - Undefined name '手機號碼登入' - lib\language_prefs.dart:227:48 - undefined_identifier
+  error - Illegal character '27231' - lib\language_prefs.dart:227:49 - illegal_character
+  error - Illegal character '34399' - lib\language_prefs.dart:227:50 - illegal_character
+  error - Illegal character '30908' - lib\language_prefs.dart:227:51 - illegal_character
+  error - Illegal character '30331' - lib\language_prefs.dart:227:52 - illegal_character
+  error - Illegal character '20837' - lib\language_prefs.dart:227:53 - illegal_character
+  error - Expected to find ',' - lib\language_prefs.dart:227:54 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:227:58 - expected_token
+  error - Too many positional arguments: 3 expected, but 11 found - lib\language_prefs.dart:227:58 - extra_positional_arguments
+  error - Undefined name 'Sign' - lib\language_prefs.dart:227:58 - undefined_identifier
+  error - 'in' can't be used as an identifier because it's a keyword - lib\language_prefs.dart:227:63 - expected_identifier_but_got_keyword
+  error - Expected to find ',' - lib\language_prefs.dart:227:63 - expected_token
+  error - Undefined name 'in' - lib\language_prefs.dart:227:63 - undefined_identifier
+  error - 'with' can't be used as an identifier because it's a keyword - lib\language_prefs.dart:227:66 - expected_identifier_but_got_keyword
+  error - Expected to find ',' - lib\language_prefs.dart:227:66 - expected_token
+  error - Undefined name 'with' - lib\language_prefs.dart:227:66 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:227:71 - expected_token
+  error - Undefined name 'Phone' - lib\language_prefs.dart:227:71 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:227:76 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:227:78 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:228:3 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:228:10 - expected_token
+  error - Undefined name 'get' - lib\language_prefs.dart:228:10 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:228:14 - expected_token
+  error - Expected to find ';' - lib\language_prefs.dart:228:14 - expected_token
+  error - Undefined name 'loginWithEmail' - lib\language_prefs.dart:228:14 - undefined_identifier
+  error - Expected an identifier - lib\language_prefs.dart:228:29 - missing_identifier
+  error - Expected to find ')' - lib\language_prefs.dart:228:29 - expected_token
+  error - Methods must have an explicit list of parameters - lib\language_prefs.dart:228:29 - missing_method_parameters
+  error - Expected to find ',' - lib\language_prefs.dart:229:47 - expected_token
+  error - Illegal character '35352' - lib\language_prefs.dart:229:47 - illegal_character
+  error - Undefined name '記住' - lib\language_prefs.dart:229:47 - undefined_identifier
+  error - Illegal character '20303' - lib\language_prefs.dart:229:48 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:229:49 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:229:51 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:229:51 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:230:46 - expected_token
+  error - Illegal character '20197' - lib\language_prefs.dart:230:46 - illegal_character
+  error - Undefined name '以訪客身份繼' - lib\language_prefs.dart:230:46 - undefined_identifier
+  error - Illegal character '35370' - lib\language_prefs.dart:230:47 - illegal_character
+  error - Illegal character '23458' - lib\language_prefs.dart:230:48 - illegal_character
+  error - Illegal character '36523' - lib\language_prefs.dart:230:49 - illegal_character
+  error - Illegal character '20221' - lib\language_prefs.dart:230:50 - illegal_character
+  error - Illegal character '32380' - lib\language_prefs.dart:230:51 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:230:52 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:230:54 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:230:54 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:231:83 - expected_token
+  error - Undefined name 'By' - lib\language_prefs.dart:231:83 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:231:86 - expected_token
+  error - Too many positional arguments: 3 expected, but 15 found - lib\language_prefs.dart:231:86 - extra_positional_arguments
+  error - Undefined name 'signing' - lib\language_prefs.dart:231:86 - undefined_identifier
+  error - 'in' can't be used as an identifier because it's a keyword - lib\language_prefs.dart:231:94 - expected_identifier_but_got_keyword
+  error - Expected to find ',' - lib\language_prefs.dart:231:94 - expected_token
+  error - Undefined name 'in' - lib\language_prefs.dart:231:94 - undefined_identifier
+  error - Undefined name 'you' - lib\language_prefs.dart:231:98 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:231:102 - expected_token
+  error - Undefined name 'agree' - lib\language_prefs.dart:231:102 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:231:108 - expected_token
+  error - Undefined name 'to' - lib\language_prefs.dart:231:108 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:231:111 - expected_token
+  error - Undefined name 'our' - lib\language_prefs.dart:231:111 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:231:115 - expected_token
+  error - Undefined name 'Terms' - lib\language_prefs.dart:231:115 - undefined_identifier
+  error - Undefined name 'Privacy' - lib\language_prefs.dart:231:123 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:231:131 - expected_token
+  error - Undefined name 'Policy' - lib\language_prefs.dart:231:131 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:231:137 - expected_token
+  error - Unterminated string literal - lib\language_prefs.dart:231:139 - unterminated_string_literal
+  error - Expected to find ',' - lib\language_prefs.dart:232:3 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:232:10 - expected_token
+  error - Undefined name 'get' - lib\language_prefs.dart:232:10 - undefined_identifier
+  error - Expected to find ',' - lib\language_prefs.dart:232:14 - expected_token
+  error - Expected to find ';' - lib\language_prefs.dart:232:14 - expected_token
+  error - Undefined name 'loginPhoneHint' - lib\language_prefs.dart:232:14 - undefined_identifier
+  error - Expected an identifier - lib\language_prefs.dart:232:29 - missing_identifier
+  error - Expected to find ')' - lib\language_prefs.dart:232:29 - expected_token
+  error - Methods must have an explicit list of parameters - lib\language_prefs.dart:232:29 - missing_method_parameters
+  error - Expected to find ',' - lib\language_prefs.dart:232:50 - expected_token
+  error - Illegal character '35531' - lib\language_prefs.dart:232:50 - illegal_character
+  error - Undefined name '請輸入手機號' - lib\language_prefs.dart:232:50 - undefined_identifier
+  error - Illegal character '36664' - lib\language_prefs.dart:232:51 - illegal_character
+  error - Illegal character '20837' - lib\language_prefs.dart:232:52 - illegal_character
+  error - Illegal character '25163' - lib\language_prefs.dart:232:53 - illegal_character
+  error - Illegal character '27231' - lib\language_prefs.dart:232:54 - illegal_character
+  error - Illegal character '34399' - lib\language_prefs.dart:232:55 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:232:56 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:232:58 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:232:58 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:236:45 - expected_token
+  error - Illegal character '39511' - lib\language_prefs.dart:236:45 - illegal_character
+  error - Undefined name '驗證並登' - lib\language_prefs.dart:236:45 - undefined_identifier
+  error - Illegal character '35657' - lib\language_prefs.dart:236:46 - illegal_character
+  error - Illegal character '20006' - lib\language_prefs.dart:236:47 - illegal_character
+  error - Illegal character '30331' - lib\language_prefs.dart:236:48 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:236:49 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:236:51 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:236:51 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:237:48 - expected_token
+  error - Illegal character '39511' - lib\language_prefs.dart:237:48 - illegal_character
+  error - Undefined name '驗證碼已發' - lib\language_prefs.dart:237:48 - undefined_identifier
+  error - Illegal character '35657' - lib\language_prefs.dart:237:49 - illegal_character
+  error - Illegal character '30908' - lib\language_prefs.dart:237:50 - illegal_character
+  error - Illegal character '24050' - lib\language_prefs.dart:237:51 - illegal_character
+  error - Illegal character '30332' - lib\language_prefs.dart:237:52 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:237:53 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:237:55 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:237:55 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:238:45 - expected_token
+  error - Illegal character '25110' - lib\language_prefs.dart:238:45 - illegal_character
+  error - Undefined name '或使用以下方式登' - lib\language_prefs.dart:238:45 - undefined_identifier
+  error - Illegal character '20351' - lib\language_prefs.dart:238:46 - illegal_character
+  error - Illegal character '29992' - lib\language_prefs.dart:238:47 - illegal_character
+  error - Illegal character '20197' - lib\language_prefs.dart:238:48 - illegal_character
+  error - Illegal character '19979' - lib\language_prefs.dart:238:49 - illegal_character
+  error - Illegal character '26041' - lib\language_prefs.dart:238:50 - illegal_character
+  error - Illegal character '24335' - lib\language_prefs.dart:238:51 - illegal_character
+  error - Illegal character '30331' - lib\language_prefs.dart:238:52 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:238:53 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:238:55 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:238:55 - expected_token
+  error - Const variables must be initialized with a constant value - lib\language_prefs.dart:252:30 - const_initialized_with_non_constant_value
+  error - Expected to find ',' - lib\language_prefs.dart:252:30 - expected_token
+  error - Illegal character '21839' - lib\language_prefs.dart:252:30 - illegal_character
+  error - The values in a const list literal must be constants - lib\language_prefs.dart:252:30 - non_constant_list_element
+  error - The values in a const map literal must be constant - lib\language_prefs.dart:252:30 - non_constant_map_value
+  error - Undefined name '問' - lib\language_prefs.dart:252:30 - undefined_identifier
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:252:31 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:252:33 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:252:33 - expected_token
+  error - Expected to find ',' - lib\language_prefs.dart:274:31 - expected_token
+  error - Illegal character '24418' - lib\language_prefs.dart:274:31 - illegal_character
+  error - The values in a const list literal must be constants - lib\language_prefs.dart:274:31 - non_constant_list_element
+  error - The values in a const map literal must be constant - lib\language_prefs.dart:274:31 - non_constant_map_value
+  error - Undefined name '形容' - lib\language_prefs.dart:274:31 - undefined_identifier
+  error - Illegal character '23481' - lib\language_prefs.dart:274:32 - illegal_character
+  error - Unable to decode bytes as UTF-8 - lib\language_prefs.dart:274:33 - encoding
+  error - Expected an identifier - lib\language_prefs.dart:274:35 - missing_identifier
+  error - Expected to find ':' - lib\language_prefs.dart:274:35 - expected_token
+  error - Unterminated string literal - lib\login_page.dart:86:79 - unterminated_string_literal
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\login_page.dart:188:74 - deprecated_member_use
+  error - The getter 'loginWelcome' isn't defined for the type 'L10n' - lib\login_page.dart:194:22 - undefined_getter
+  error - Unterminated string literal - lib\login_page.dart:204:115 - unterminated_string_literal
+  error - Expected to find ',' - lib\login_page.dart:205:15 - expected_token
+  error - Too many positional arguments: 5 expected, but 9 found - lib\login_page.dart:205:15 - extra_positional_arguments_could_be_named
+  error - Unterminated string literal - lib\login_page.dart:208:115 - unterminated_string_literal
+  error - Expected to find ',' - lib\login_page.dart:209:15 - expected_token
+  error - Too many positional arguments: 5 expected, but 7 found - lib\login_page.dart:209:15 - extra_positional_arguments_could_be_named
+  error - Unterminated string literal - lib\login_page.dart:210:115 - unterminated_string_literal
+  error - Expected to find ',' - lib\login_page.dart:212:15 - expected_token
+  error - Too many positional arguments: 5 expected, but 16 found - lib\login_page.dart:212:15 - extra_positional_arguments_could_be_named
+  error - The getter 'loginWithEmail' isn't defined for the type 'L10n' - lib\login_page.dart:238:35 - undefined_getter
+  error - Expected to find ')' - lib\login_page.dart:268:13 - expected_token
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\login_page.dart:294:81 - deprecated_member_use
+  error - The getter 'loginWithEmail' isn't defined for the type 'L10n' - lib\login_page.dart:322:52 - undefined_getter
+  error - The getter 'loginPhoneHint' isn't defined for the type 'L10n' - lib\login_page.dart:337:39 - undefined_getter
+   info - Statements in an if should be enclosed in a block - lib\main.dart:26:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:27:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:28:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:29:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:30:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:31:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:32:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:33:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:34:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:35:37 - curly_braces_in_flow_control_structures
+   info - The prefix 'tzData' isn't a lower_case_with_underscores identifier - lib\notification_service.dart:6:51 - library_prefixes
+  error - Unterminated string literal - lib\notification_service.dart:172:37 - unterminated_string_literal
+  error - Expected to find ',' - lib\notification_service.dart:173:7 - expected_token
+  error - Expected to find ';' - lib\practice_page.dart:250:63 - expected_token
+  error - Unterminated string literal - lib\practice_page.dart:250:68 - unterminated_string_literal
+  error - Expected to find ')' - lib\practice_page.dart:251:5 - expected_token
+  error - The getter 'practiceEmpty' isn't defined for the type 'L10n' - lib\practice_page.dart:537:15 - undefined_getter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:861:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:864:48 - deprecated_member_use
+  error - Unterminated string literal - lib\practice_page.dart:867:67 - unterminated_string_literal
+  error - Expected to find ',' - lib\practice_page.dart:868:13 - expected_token
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:929:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:932:48 - deprecated_member_use
+  error - Unterminated string literal - lib\practice_page.dart:935:67 - unterminated_string_literal
+  error - Expected to find ',' - lib\practice_page.dart:936:13 - expected_token
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1060:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1063:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1154:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1157:47 - deprecated_member_use
+  error - Unterminated string literal - lib\practice_page.dart:1188:60 - unterminated_string_literal
+  error - Expected to find ':' - lib\practice_page.dart:1189:29 - expected_token
+  error - Undefined name 'style' - lib\practice_page.dart:1189:29 - undefined_identifier
+  error - Expected to find ')' - lib\practice_page.dart:1189:34 - expected_token
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1203:50 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\settings_language_page.dart:38:7 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:119:41 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:120:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:121:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:122:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:123:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:124:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:125:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:126:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:127:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:128:39 - curly_braces_in_flow_control_structures
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:126:28 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:257:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:259:51 - deprecated_member_use
+  error - The getter 'notifExactTitle' isn't defined for the type 'L10n' - lib\settings_page.dart:491:27 - undefined_getter
+  error - The getter 'notifEndTime' isn't defined for the type 'L10n' - lib\settings_page.dart:520:48 - undefined_getter
+   info - 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre - lib\settings_page.dart:590:25 - deprecated_member_use
+  error - The getter 'notifEndTime' isn't defined for the type 'L10n' - lib\settings_page.dart:608:30 - undefined_getter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:734:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:739:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:803:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\setup_language_page.dart:124:70 - deprecated_member_use
+
+888 issues found. (ran in 10.4s)

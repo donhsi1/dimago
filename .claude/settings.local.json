@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp:*)",
+      "Bash(flutter devices:*)",
+      "Bash(flutter build:*)",
+      "Read(//d/users/admin/workbuddy/lango/**)",
+      "Bash(flutter analyze:*)",
+      "Bash(python3:*)",
+      "Bash(flutter clean:*)",
+      "Bash(flutter install:*)",
+      "Bash(git init:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

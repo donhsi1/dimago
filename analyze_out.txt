@@ -1,0 +1,85 @@
+Resolving dependencies...
+Downloading packages...
+  archive 3.6.1 (4.0.9 available)
+  file_picker 8.3.7 (10.3.10 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_local_notifications 17.2.4 (21.0.0 available)
+  flutter_local_notifications_linux 4.0.1 (8.0.0 available)
+  flutter_local_notifications_platform_interface 7.2.0 (11.0.0 available)
+  google_sign_in 6.3.0 (7.2.0 available)
+  google_sign_in_android 6.2.1 (7.2.10 available)
+  google_sign_in_ios 5.9.0 (6.3.0 available)
+  google_sign_in_platform_interface 2.5.0 (3.1.0 available)
+  google_sign_in_web 0.12.4+4 (1.1.3 available)
+  lints 5.1.1 (6.1.0 available)
+  meta 1.17.0 (1.18.2 available)
+  record 5.2.1 (6.2.0 available)
+! record_linux 1.3.0 (overridden)
+  test_api 0.7.10 (0.7.11 available)
+  timezone 0.9.4 (0.11.0 available)
+  vector_math 2.2.0 (2.3.0 available)
+  win32 5.15.0 (6.0.0 available)
+Got dependencies!
+18 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing lango...                                              
+
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\add_word_page.dart:523:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\api_stats_page.dart:130:59 - deprecated_member_use
+   info - The import of 'package:sqflite/sqflite.dart' is unnecessary because all of the used elements are also provided by the import of 'package:sqflite_common_ffi/sqflite_ffi.dart' - lib\database_helper.dart:3:8 - unnecessary_import
+   info - Statements in an if should be enclosed in a block - lib\database_helper.dart:632:40 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\database_helper.dart:633:12 - curly_braces_in_flow_control_structures
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\dictionary_list_page.dart:213:25 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\dictionary_list_page.dart:214:25 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\dictionary_list_page.dart:527:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\dictionary_list_page.dart:574:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\dictionary_list_page.dart:835:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\dictionary_list_page.dart:838:54 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\import_page.dart:263:17 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\import_page.dart:302:58 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\import_page.dart:414:11 - deprecated_member_use
+   info - Angle brackets will be interpreted as HTML - lib\lang_db_service.dart:67:55 - unintended_html_in_doc_comment
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\login_page.dart:188:74 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\login_page.dart:294:81 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block - lib\main.dart:26:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:27:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:28:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:29:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:30:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:31:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:32:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:33:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:34:37 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\main.dart:35:37 - curly_braces_in_flow_control_structures
+   info - The prefix 'tzData' isn't a lower_case_with_underscores identifier - lib\notification_service.dart:6:51 - library_prefixes
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:861:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:864:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:929:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:932:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1060:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1063:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1154:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1157:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\practice_page.dart:1203:50 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\settings_language_page.dart:38:7 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\settings_language_page.dart:99:22 - use_build_context_synchronously
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:118:41 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:119:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:120:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:121:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:122:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:123:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:124:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:125:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:126:39 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\settings_language_page.dart:127:39 - curly_braces_in_flow_control_structures
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:126:28 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:257:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:259:51 - deprecated_member_use
+   info - 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre - lib\settings_page.dart:590:25 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:734:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:739:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\settings_page.dart:803:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\setup_language_page.dart:124:70 - deprecated_member_use
+
+57 issues found. (ran in 13.3s)
