@@ -1,9 +1,19 @@
-﻿import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_screen_recording/flutter_screen_recording.dart';
+import 'package:video_player/video_player.dart';
+import 'dart:io';
+import 'app_tab_controller.dart';
+import 'recorder_controller.dart';
+import 'database_helper.dart';
 import 'notification_service.dart';
 import 'language_prefs.dart';
 import 'settings_language_page.dart';
+import 'system_prefs.dart';
+import 'system_prefs_notifier.dart';
 
 // ── TTS 设定 Key 常量 ─────────────────────────────────────────
 class TtsPrefs {
@@ -18,6 +28,22 @@ class TtsPrefs {
 class DictPrefs {
   static const maxCorrectCount = 'dict_max_correct_count';
   static const defaultMaxCorrectCount = 100;
+}
+
+// ── Quiz 设定 Key 常量 ────────────────────────────────────────
+class QuizPrefs {
+  static const durationKey    = 'quiz_duration_seconds';
+  static const minDurationKey = 'quiz_min_duration_seconds';
+  static const accuracyThresholdKey = 'quiz_accuracy_threshold_percent';
+  static const defaultDuration    = 5;
+  static const defaultMinDuration = 2;
+  static const defaultAccuracyThreshold = 70;
+  static const minAllowedDuration    = 2;
+  static const maxAllowedDuration    = 10;
+  static const minAllowedMinDuration = 2;
+  static const maxAllowedMinDuration = 5;
+  static const minAccuracyThreshold = 1;
+  static const maxAccuracyThreshold = 100;
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -93,6 +119,24 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(
                     builder: (_) => const SettingsLanguagePage())),
+          ),
+          _SettingsEntry(
+            icon: Icons.timer,
+            iconColor: const Color(0xFFE65100),
+            title: l.challengeLabel,
+            subtitle: l.challengeSettingsSub,
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const SettingsQuizPage())),
+          ),
+          _SettingsEntry(
+            icon: Icons.settings,
+            iconColor: Colors.blueGrey,
+            title: l.settingsSystem,
+            subtitle: l.settingsSystemSub,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SettingsSystemPage()),
+            ),
           ),
         ],
       ),
@@ -756,6 +800,812 @@ class _GenderChip extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// Quiz 子页
+// ════════════════════════════════════════════════════════════════
+class SettingsQuizPage extends StatefulWidget {
+  const SettingsQuizPage({super.key});
+
+  @override
+  State<SettingsQuizPage> createState() => _SettingsQuizPageState();
+}
+
+class _SettingsQuizPageState extends State<SettingsQuizPage> {
+  int _duration    = QuizPrefs.defaultDuration;
+  int _minDuration = QuizPrefs.defaultMinDuration;
+  int _accuracyThreshold = QuizPrefs.defaultAccuracyThreshold;
+  int? _currentCategoryId;
+  String _categoryName = '';
+
+  L10n get _l => L10n(AppLangNotifier().uiLang);
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    final minDur = (prefs.getInt(QuizPrefs.minDurationKey) ?? QuizPrefs.defaultMinDuration)
+        .clamp(QuizPrefs.minAllowedMinDuration, QuizPrefs.maxAllowedMinDuration);
+    final accTh = (prefs.getInt(QuizPrefs.accuracyThresholdKey) ?? QuizPrefs.defaultAccuracyThreshold)
+        .clamp(QuizPrefs.minAccuracyThreshold, QuizPrefs.maxAccuracyThreshold);
+
+    // Load duration from the currently selected category's count_down
+    int dur = QuizPrefs.defaultDuration;
+    int? catId;
+    String catName = '';
+    try {
+      catId = await SharedCategoryPrefs.load();
+      if (catId != null && catId != -999) {
+        final cats = await DatabaseHelper.getAllCategories();
+        final cat = cats.firstWhere((c) => c.id == catId,
+            orElse: () => CategoryEntry(nameNative: ''));
+        if (cat.id != null) {
+          dur = cat.countDown > 0 ? cat.countDown : QuizPrefs.defaultDuration;
+          catName = cat.nameNative.isNotEmpty ? cat.nameNative : cat.nameTranslate;
+        }
+      }
+    } catch (_) {}
+
+    if (mounted) {
+      setState(() {
+        _duration = dur.clamp(QuizPrefs.minAllowedDuration, QuizPrefs.maxAllowedDuration);
+        _minDuration = minDur;
+        _accuracyThreshold = accTh;
+        _currentCategoryId = catId;
+        _categoryName = catName;
+      });
+    }
+  }
+
+  Future<void> _saveDuration(int value) async {
+    if (_currentCategoryId != null && _currentCategoryId != -999) {
+      await DatabaseHelper.updateCategoryCountDown(_currentCategoryId!, value);
+    }
+  }
+
+  Future<void> _saveMinDuration(int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(QuizPrefs.minDurationKey, value);
+  }
+
+  Future<void> _saveAccuracyThreshold(int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(QuizPrefs.accuracyThresholdKey, value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = _l;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1565C0),
+        foregroundColor: Colors.white,
+        title: Text(l.challengeSettingsTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ── Category label ───────────────────────────
+                  if (_categoryName.isNotEmpty) ...[
+                    Row(
+                      children: [
+                        Icon(Icons.folder_outlined, color: Colors.grey.shade500, size: 16),
+                        const SizedBox(width: 6),
+                        Text(
+                          _categoryName,
+                          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+
+                  // ── Duration slider ──────────────────────────
+                  Row(
+                    children: [
+                      const Icon(Icons.timer, color: Color(0xFFE65100), size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(l.challengeTimerDuration,
+                                style: const TextStyle(fontWeight: FontWeight.w600)),
+                            Text(l.challengeTimerDurationNote,
+                                style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        '${_duration}s',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFE65100),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      activeTrackColor: const Color(0xFFE65100),
+                      thumbColor: const Color(0xFFE65100),
+                      overlayColor: const Color(0xFFE65100).withOpacity(0.15),
+                      inactiveTrackColor: const Color(0xFFE65100).withOpacity(0.2),
+                    ),
+                    child: Slider(
+                      value: _duration.toDouble(),
+                      min: QuizPrefs.minAllowedDuration.toDouble(),
+                      max: QuizPrefs.maxAllowedDuration.toDouble(),
+                      divisions: QuizPrefs.maxAllowedDuration - QuizPrefs.minAllowedDuration,
+                      label: '${_duration}s',
+                      onChanged: (v) {
+                        final d = v.round();
+                        setState(() {
+                          _duration = d;
+                          if (_minDuration > d) _minDuration = d.clamp(QuizPrefs.minAllowedMinDuration, QuizPrefs.maxAllowedMinDuration);
+                        });
+                      },
+                      onChangeEnd: (v) => _saveDuration(v.round()),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${QuizPrefs.minAllowedDuration}s', style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                      Text('${QuizPrefs.maxAllowedDuration}s', style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+                  const Divider(),
+                  const SizedBox(height: 12),
+
+                  // ── Minimum duration ─────────────────────────
+                  Row(
+                    children: [
+                      const Icon(Icons.timer_off_outlined, color: Color(0xFF1565C0), size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(l.challengeMinDuration,
+                                style: const TextStyle(fontWeight: FontWeight.w600)),
+                            Text(l.challengeMinDurationNote,
+                                style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        '${_minDuration}s',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1565C0),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      activeTrackColor: const Color(0xFF1565C0),
+                      thumbColor: const Color(0xFF1565C0),
+                      overlayColor: const Color(0xFF1565C0).withOpacity(0.15),
+                      inactiveTrackColor: const Color(0xFF1565C0).withOpacity(0.2),
+                    ),
+                    child: Slider(
+                      value: _minDuration.toDouble(),
+                      min: QuizPrefs.minAllowedMinDuration.toDouble(),
+                      max: QuizPrefs.maxAllowedMinDuration.toDouble(),
+                      divisions: QuizPrefs.maxAllowedMinDuration - QuizPrefs.minAllowedMinDuration,
+                      label: '${_minDuration}s',
+                      onChanged: (v) => setState(() => _minDuration = v.round()),
+                      onChangeEnd: (v) => _saveMinDuration(v.round()),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${QuizPrefs.minAllowedMinDuration}s', style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                      Text('${QuizPrefs.maxAllowedMinDuration}s', style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+                  const Divider(),
+                  const SizedBox(height: 12),
+
+                  // ── Talk challenge accuracy threshold ─────────
+                  Row(
+                    children: [
+                      const Icon(Icons.graphic_eq, color: Color(0xFF6A1B9A), size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(l.challengeAccuracyThreshold,
+                                style: const TextStyle(fontWeight: FontWeight.w600)),
+                            Text(l.challengeAccuracyThresholdNote,
+                                style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        '$_accuracyThreshold%',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF6A1B9A),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      activeTrackColor: const Color(0xFF6A1B9A),
+                      thumbColor: const Color(0xFF6A1B9A),
+                      overlayColor: const Color(0xFF6A1B9A).withOpacity(0.15),
+                      inactiveTrackColor: const Color(0xFF6A1B9A).withOpacity(0.2),
+                    ),
+                    child: Slider(
+                      value: _accuracyThreshold.toDouble(),
+                      min: QuizPrefs.minAccuracyThreshold.toDouble(),
+                      max: QuizPrefs.maxAccuracyThreshold.toDouble(),
+                      divisions: QuizPrefs.maxAccuracyThreshold - QuizPrefs.minAccuracyThreshold,
+                      label: '$_accuracyThreshold%',
+                      onChanged: (v) => setState(() => _accuracyThreshold = v.round()),
+                      onChangeEnd: (v) => _saveAccuracyThreshold(v.round()),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${QuizPrefs.minAccuracyThreshold}%', style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                      Text('${QuizPrefs.maxAccuracyThreshold}%', style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// System / Profile subpages
+// ════════════════════════════════════════════════════════════════
+class SettingsSystemPage extends StatefulWidget {
+  const SettingsSystemPage({super.key});
+
+  @override
+  State<SettingsSystemPage> createState() => _SettingsSystemPageState();
+}
+
+class _SettingsSystemPageState extends State<SettingsSystemPage> {
+  bool _showHelpTooltips = SystemPrefs.defaultShowHelpTooltips;
+
+  L10n get _l => L10n(AppLangNotifier().uiLang);
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    // Prefer notifier so the toggle updates across the app immediately.
+    await SystemPrefsNotifier().load();
+    if (!mounted) return;
+    setState(() => _showHelpTooltips = SystemPrefsNotifier().showHelpTooltips);
+  }
+
+  Future<void> _setShowHelpTooltips(bool v) async {
+    setState(() => _showHelpTooltips = v);
+    await SystemPrefsNotifier().setShowHelpTooltips(v);
+  }
+
+  Future<void> _openFeedbackDialog() async {
+    final l = _l;
+    final subjectCtrl = TextEditingController(text: l.feedbackDefaultSubject);
+    final commentCtrl = TextEditingController();
+
+    Future<void> sendFeedback() async {
+      final subject = subjectCtrl.text.trim().isEmpty
+          ? l.feedbackDefaultSubject
+          : subjectCtrl.text.trim();
+      final body = commentCtrl.text.trim();
+      final uri = Uri(
+        scheme: 'mailto',
+        path: 'don.hsi1@gmail.com',
+        queryParameters: <String, String>{
+          'subject': subject,
+          'body': body,
+        },
+      );
+      final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!mounted) return;
+      if (!ok) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l.feedbackNoMailApp)),
+        );
+      } else {
+        Navigator.of(context).pop();
+      }
+    }
+
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l.systemFeedbackTitle),
+        content: SizedBox(
+          width: 460,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: subjectCtrl,
+                decoration: InputDecoration(labelText: l.feedbackSubjectLabel),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: commentCtrl,
+                minLines: 4,
+                maxLines: 8,
+                decoration: InputDecoration(labelText: l.feedbackCommentLabel),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(l.cancel),
+          ),
+          FilledButton(
+            onPressed: sendFeedback,
+            child: Text(l.feedbackSend),
+          ),
+        ],
+      ),
+    );
+
+    subjectCtrl.dispose();
+    commentCtrl.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = _l;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1565C0),
+        foregroundColor: Colors.white,
+        title: Text(
+          l.settingsSystem,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.help_outline, color: Color(0xFF1565C0), size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l.systemShowHelpTooltips,
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              l.systemShowHelpTooltipsNote,
+                              style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Switch(
+                        value: _showHelpTooltips,
+                        onChanged: (v) => _setShowHelpTooltips(v),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            elevation: 2,
+            child: ListTile(
+              leading: const Icon(Icons.videocam, color: Colors.red),
+              title: Text(
+                l.settingsRecorder,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(l.settingsRecorderSub),
+              trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SettingsRecorderPage(),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            elevation: 2,
+            child: ListTile(
+              leading: const Icon(Icons.account_circle_outlined, color: Color(0xFF1565C0)),
+              title: Text(l.profileTitle, style: const TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: Text(l.profileSub),
+              trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsProfilePage()),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            elevation: 2,
+            child: ListTile(
+              leading: const Icon(Icons.feedback_outlined, color: Color(0xFF1565C0)),
+              title: Text(l.systemFeedbackTitle, style: const TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: Text(l.systemFeedbackSub),
+              trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+              onTap: _openFeedbackDialog,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SettingsProfilePage extends StatefulWidget {
+  const SettingsProfilePage({super.key});
+
+  @override
+  State<SettingsProfilePage> createState() => _SettingsProfilePageState();
+}
+
+class SettingsRecorderPage extends StatefulWidget {
+  final String? initialVideoPath;
+  const SettingsRecorderPage({super.key, this.initialVideoPath});
+
+  @override
+  State<SettingsRecorderPage> createState() => _SettingsRecorderPageState();
+}
+
+class _SettingsRecorderPageState extends State<SettingsRecorderPage> {
+  bool _recording = false;
+  bool _loadingVideo = false;
+  String? _videoPath;
+  final List<String> _temporaryRecordings = <String>[];
+  VideoPlayerController? _videoController;
+
+  L10n get _l => L10n(AppLangNotifier().uiLang);
+
+  @override
+  void initState() {
+    super.initState();
+    _recording = RecorderController.isRecording.value;
+    final initialPath = widget.initialVideoPath;
+    if (initialPath != null && initialPath.isNotEmpty) {
+      _videoPath = initialPath;
+      if (!_temporaryRecordings.contains(initialPath)) {
+        _temporaryRecordings.add(initialPath);
+      }
+      _prepareVideo(initialPath);
+    }
+  }
+
+  @override
+  void dispose() {
+    _videoController?.pause();
+    _videoController?.dispose();
+    for (final p in _temporaryRecordings) {
+      try {
+        final f = File(p);
+        if (f.existsSync()) {
+          f.deleteSync();
+        }
+      } catch (_) {}
+    }
+    super.dispose();
+  }
+
+  Future<void> _startRecording() async {
+    final ok = await FlutterScreenRecording.startRecordScreenAndAudio(
+      'dimago_${DateTime.now().millisecondsSinceEpoch}',
+      titleNotification: 'DimaGo Recorder',
+      messageNotification: 'Recording in progress',
+    );
+    if (!mounted) return;
+    if (!ok) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(_l.recorderStartFailed)));
+      return;
+    }
+    setState(() => _recording = true);
+    RecorderController.markStarted();
+    // Jump back to Practice tab while recording continues.
+    AppTabController.jumpTo(1);
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future<void> _stopRecording() async {
+    setState(() {
+      _recording = false;
+      _loadingVideo = true;
+    });
+    final path = await RecorderController.stopRecording();
+    if (!mounted) return;
+    if (path.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(_l.recorderStopFailed)));
+      setState(() => _loadingVideo = false);
+      return;
+    }
+    await _prepareVideo(path);
+    if (!mounted) return;
+    setState(() {
+      _videoPath = path;
+    });
+    if (!_temporaryRecordings.contains(path)) {
+      _temporaryRecordings.add(path);
+    }
+  }
+
+  Future<void> _prepareVideo(String path) async {
+    VideoPlayerController? controller;
+    try {
+      await _videoController?.dispose();
+      controller = VideoPlayerController.file(File(path));
+      await controller.initialize().timeout(const Duration(seconds: 15));
+      if (!mounted) {
+        await controller.dispose();
+        return;
+      }
+      setState(() {
+        _videoController = controller;
+      });
+    } on TimeoutException {
+      await controller?.dispose();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_l.recorderStopFailed)),
+      );
+    } catch (_) {
+      await controller?.dispose();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_l.recorderStopFailed)),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _loadingVideo = false);
+      }
+    }
+  }
+
+  void _play() => _videoController?.play();
+  void _pause() => _videoController?.pause();
+  void _stopPlayback() {
+    final c = _videoController;
+    if (c == null) return;
+    c.pause();
+    c.seekTo(Duration.zero);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = _l;
+    final c = _videoController;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1565C0),
+        foregroundColor: Colors.white,
+        title: Text(l.recorderTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: FilledButton.icon(
+                  onPressed: _recording ? null : _startRecording,
+                  icon: const Icon(Icons.fiber_manual_record),
+                  label: Text(l.recorderStart),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _recording ? _stopRecording : null,
+                  icon: const Icon(Icons.stop_circle_outlined),
+                  label: Text(l.recorderStop),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          if (_recording)
+            const LinearProgressIndicator(minHeight: 3),
+          if (_recording) const SizedBox(height: 12),
+          if (_recording)
+            Text(
+              'Recording...',
+              style: TextStyle(
+                color: Colors.red.shade700,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          const SizedBox(height: 16),
+          if (_loadingVideo) Text(l.recorderPreparing),
+          if (!_loadingVideo && c != null && c.value.isInitialized) ...[
+            AspectRatio(
+              aspectRatio: c.value.aspectRatio == 0 ? 16 / 9 : c.value.aspectRatio,
+              child: VideoPlayer(c),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    onPressed: _play,
+                    child: Text(l.recorderPlay),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: _pause,
+                    child: Text(l.recorderPause),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: _stopPlayback,
+                    child: Text(l.recorderPlaybackStop),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              c.value.isPlaying ? l.recorderPause : l.recorderPlay,
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            ),
+            if (_videoPath != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                _videoPath!,
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+              ),
+            ]
+          ] else if (!_recording) ...[
+            Text(l.recorderNoRecording,
+                style: TextStyle(color: Colors.grey.shade600)),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _SettingsProfilePageState extends State<SettingsProfilePage> {
+  bool _loggedIn = false;
+  String _provider = '';
+  String _displayName = '';
+  bool _rememberMe = false;
+
+  L10n get _l => L10n(AppLangNotifier().uiLang);
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    setState(() {
+      _loggedIn = prefs.getBool(LangPrefs.loggedIn) ?? false;
+      _provider = prefs.getString('login_provider') ?? '';
+      _displayName = prefs.getString('login_display_name') ?? '';
+      _rememberMe = prefs.getBool(LangPrefs.rememberMe) ?? false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = _l;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1565C0),
+        foregroundColor: Colors.white,
+        title: Text(l.profileTitle, style: const TextStyle(fontWeight: FontWeight.bold)),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _loggedIn ? l.profileLoggedIn : l.profileNotLoggedIn,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 12),
+                  if (_loggedIn) ...[
+                    Text(
+                      '${l.profileDisplayName}: ${_displayName.isNotEmpty ? _displayName : '-'}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${l.profileLoginProvider}: ${_provider.isNotEmpty ? _provider : '-'}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${l.profileRememberMe}: ${_rememberMe ? 'Yes' : 'No'}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ] else
+                    Text(
+                      l.profileSub,
+                      style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

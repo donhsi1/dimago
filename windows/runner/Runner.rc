@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "thailearn" "\0"
+            VALUE "FileDescription", "DimaGo" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "thailearn" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "thailearn.exe" "\0"
-            VALUE "ProductName", "thailearn" "\0"
+            VALUE "InternalName", "dimago" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 DimaGo. All rights reserved." "\0"
+            VALUE "OriginalFilename", "dimago.exe" "\0"
+            VALUE "ProductName", "DimaGo" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

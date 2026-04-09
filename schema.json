@@ -1,0 +1,236 @@
+{
+  "description": "DimaGo dict_<TR>_<NA>.db schema",
+  "generatedFrom": "dict_TH_CN.db",
+  "tables": [
+    {
+      "name": "category",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "constraints": "PRIMARY KEY AUTOINCREMENT"
+        },
+        {
+          "name": "name_native",
+          "type": "TEXT",
+          "constraints": "NOT NULL"
+        },
+        {
+          "name": "name_translate",
+          "type": "TEXT",
+          "constraints": "NOT NULL"
+        },
+        {
+          "name": "name_EN",
+          "type": "TEXT",
+          "constraints": "NOT NULL"
+        },
+        {
+          "name": "lesson_id",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0",
+          "comment": "unique Id different from id index"
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0"
+        },
+        {
+          "name": "language_tag",
+          "type": "TEXT",
+          "comment": "Country code: user native language on device"
+        },
+        {
+          "name": "lang_translate",
+          "type": "TEXT",
+          "comment": "Country code: language to learn (dict_<TRANSLATE>_<NATIVE>.db first segment)"
+        },
+        {
+          "name": "lang_native",
+          "type": "TEXT",
+          "comment": "Country code: user native (dict_<TRANSLATE>_<NATIVE>.db second segment)"
+        },
+        {
+          "name": "access",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0",
+          "comment": "access code public vs private"
+        },
+        {
+          "name": "difficulty",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0",
+          "comment": "0-easy, 1-medium, 2-hard"
+        },
+        {
+          "name": "date_created",
+          "type": "TEXT"
+        },
+        {
+          "name": "date_modified",
+          "type": "TEXT"
+        },
+        {
+          "name": "count",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0",
+          "comment": "count of words in this category, can be updated when add/remove word"
+        },
+        {
+          "name": "count_down",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 5",
+          "comment": "count down counter seconds for challenge mode"
+        },
+        {
+          "name": "practice_type",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0",
+          "comment": "three types of practices/challenges; 0:word, 1:phrase, 2:photo"
+        },
+        {
+          "name": "challenge",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0",
+          "comment": "keep the challenge result(need definition)"
+        },
+        {
+          "name": "photo",
+          "type": "TEXT",
+          "comment": "link to thumbnail image"
+        },
+        {
+          "name": "is_favorite",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0"
+        }
+      ]
+    },
+    {
+      "name": "word",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "constraints": "PRIMARY KEY"
+        },
+        {
+          "name": "name_native",
+          "type": "TEXT",
+          "constraints": "NOT NULL"
+        },
+        {
+          "name": "name_translate",
+          "type": "TEXT",
+          "constraints": "NOT NULL"
+        },
+        {
+          "name": "name_EN",
+          "type": "TEXT",
+          "constraints": "NOT NULL"
+        },
+        {
+          "name": "roman_native",
+          "type": "TEXT"
+        },
+        {
+          "name": "roman_translate",
+          "type": "TEXT"
+        },
+        {
+          "name": "audio_translate",
+          "type": "BLOB",
+          "comment": "load on demand, pre-load for frequently used word"
+        },
+        {
+          "name": "audio_native",
+          "type": "BLOB"
+        },
+        {
+          "name": "definition_native",
+          "type": "TEXT"
+        },
+        {
+          "name": "action_native",
+          "type": "TEXT"
+        },
+        {
+          "name": "definition_translate",
+          "type": "TEXT"
+        },
+        {
+          "name": "action_translate",
+          "type": "TEXT"
+        },
+        {
+          "name": "sample1_native",
+          "type": "TEXT"
+        },
+        {
+          "name": "sample1_translate",
+          "type": "TEXT"
+        },
+        {
+          "name": "sample1_translate_roman",
+          "type": "TEXT",
+          "comment": "romanized translate sample (e.g. Thai RTGS)"
+        },
+        {
+          "name": "sample1_native_audio",
+          "type": "BLOB"
+        },
+        {
+          "name": "sample1_translate_audio",
+          "type": "BLOB",
+          "comment": "TTS for translate-language sample"
+        },
+        {
+          "name": "category_index",
+          "type": "INTEGER"
+        },
+        {
+          "name": "photo",
+          "type": "TEXT",
+          "comment": "link to thumbnail image"
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0"
+        },
+        {
+          "name": "date_created",
+          "type": "TEXT",
+          "constraints": "DEFAULT '2026-03-30'"
+        },
+        {
+          "name": "date_modified",
+          "type": "TEXT"
+        },
+        {
+          "name": "use_count",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0"
+        },
+        {
+          "name": "is_favorite",
+          "type": "INTEGER",
+          "constraints": "DEFAULT 0"
+        }
+      ]
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_word_category",
+      "table": "word",
+      "columns": ["category_index"]
+    },
+    {
+      "name": "idx_word_favorite",
+      "table": "word",
+      "columns": ["is_favorite"]
+    }
+  ]
+}

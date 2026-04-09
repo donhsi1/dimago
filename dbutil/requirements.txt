@@ -1,0 +1,5 @@
+# dbutil.py runtime dependencies
+requests>=2.31.0
+pypinyin>=0.50.0       # Chinese romanization (pinyin with tone marks)
+pythainlp>=5.0.0       # Thai romanization (icu / royin engines; avoid thai2rom — needs torch)
+supabase>=2.3.0        # Supabase Python client (for --commit)

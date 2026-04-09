@@ -1,10 +1,11 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'database_helper.dart';
+import 'talk_asr_service.dart';
 
 // ════════════════════════════════════════════════════════════════
 // LangPackService
@@ -47,6 +48,19 @@ class LangPackService {
     await prefs.setStringList(_prefKey, installed.toList());
   }
 
+  /// Maps lango pack id → `[targetLang, nativeLang]` for ASR / Talk routing.
+  static List<String> langsFromPackId(String packId) {
+    switch (packId) {
+      case 'th-tw':
+        return const ['th', 'zh_TW'];
+      case 'th-en':
+        return const ['th', 'en_US'];
+      case 'th-cn':
+      default:
+        return const ['th', 'zh_CN'];
+    }
+  }
+
   // ── 主入口：下载 + 导入 ───────────────────────────────────────
 
   /// [onProgress] 回调 0.0 ~ 1.0
@@ -54,7 +68,7 @@ class LangPackService {
     required String packId,
     required void Function(double progress, String status) onProgress,
   }) async {
-    onProgress(0.0, 'Connecting...');
+    onProgress(0.0, '');
 
     // 1. 下载到临时目→'
     final url = packUrl(packId);
@@ -62,6 +76,7 @@ class LangPackService {
     final tmpFile = File(p.join(tmpDir.path, 'lango-$packId.db'));
 
     final client = http.Client();
+    late final Future<void> asrWarmup;
     try {
       final request = http.Request('GET', Uri.parse(url));
       final response = await client.send(request);
@@ -69,6 +84,8 @@ class LangPackService {
       if (response.statusCode != 200) {
         throw Exception('Download failed: HTTP ${response.statusCode}');
       }
+
+      asrWarmup = TalkAsrService.warmupForLanguages(langsFromPackId(packId));
 
       final total = response.contentLength ?? 0;
       var received = 0;
@@ -78,7 +95,7 @@ class LangPackService {
         sink.add(chunk);
         received += chunk.length;
         if (total > 0) {
-          onProgress(received / total * 0.7, 'Downloading... ${(received / 1024).toStringAsFixed(0)} KB');
+          onProgress(received / total * 0.7, '');
         }
       }
       await sink.close();
@@ -86,14 +103,14 @@ class LangPackService {
       client.close();
     }
 
-    onProgress(0.75, 'Importing words...');
+    onProgress(0.75, '');
 
     // 2. 打开下载的语言→DB，读取词→'
     final packDb = await openDatabase(tmpFile.path, readOnly: true);
     final rows = await packDb.query('words');
     await packDb.close();
 
-    onProgress(0.85, 'Writing to dictionary...');
+    onProgress(0.85, '');
 
     // 3. 导入到本地词→DB
     final localDb = await DatabaseHelper.database;
@@ -130,6 +147,9 @@ class LangPackService {
     try { await tmpFile.delete(); } catch (_) {}
 
     await _markInstalled(packId);
-    onProgress(1.0, 'Done');
+    try {
+      await asrWarmup;
+    } catch (_) {}
+    onProgress(1.0, '');
   }
 }

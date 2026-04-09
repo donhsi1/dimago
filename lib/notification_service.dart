@@ -1,4 +1,5 @@
-﻿import 'dart:math';
+import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,11 +27,16 @@ class NotifPrefs {
 class NotificationService {
   static final _plugin = FlutterLocalNotificationsPlugin();
   static bool _initialized = false;
+  static bool get _isAndroid => defaultTargetPlatform == TargetPlatform.android;
 
   // ── 初始→──────────────────────────────────────────────────
 
   static Future<void> initialize() async {
     if (_initialized) return;
+    if (!_isAndroid) {
+      _initialized = true;
+      return;
+    }
     tzData.initializeTimeZones();
 
     // 获取设备本地时区并设置（修复 tz.local 默认 UTC 的问题）
@@ -50,6 +56,7 @@ class NotificationService {
 
   /// 请求通知权限（Android 13+），返回是否获得权限
   static Future<bool> requestPermission() async {
+    if (!_isAndroid) return false;
     final android =
         _plugin.resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
@@ -61,6 +68,7 @@ class NotificationService {
   /// 检查精确闹钟权限是否已授予（Android 12+→'
   /// 返回 true = 已有权限，false = 没有权限
   static Future<bool> canScheduleExactAlarms() async {
+    if (!_isAndroid) return true;
     final android =
         _plugin.resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
@@ -70,6 +78,7 @@ class NotificationService {
 
   /// 跳转到系→闹钟和提→设置页，让用户手动开启精确闹钟权→'
   static Future<void> openExactAlarmSettings() async {
+    if (!_isAndroid) return;
     final android =
         _plugin.resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
@@ -80,6 +89,7 @@ class NotificationService {
 
   /// 根据当前设置重新调度所有通知（先取消旧的→'
   static Future<void> reschedule() async {
+    if (!_isAndroid) return;
     await initialize();
     await _plugin.cancelAll();
 
@@ -205,6 +215,7 @@ class NotificationService {
 
   /// 取消全部通知
   static Future<void> cancelAll() async {
+    if (!_isAndroid) return;
     await initialize();
     await _plugin.cancelAll();
   }

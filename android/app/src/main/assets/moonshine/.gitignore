@@ -1,0 +1,3 @@
+# Download ONNX models into tiny-en/ and base-zh/ (see scripts/download_moonshine_models.ps1).
+*.ort
+*.bin

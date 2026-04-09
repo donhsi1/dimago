@@ -1,4 +1,4 @@
-﻿import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Tracks total API call counts, persisted across app restarts.
 /// Usage:
@@ -63,4 +63,7 @@ class ApiName {
 
   /// Google Translate TTS →Chinese (tl=zh-CN)
   static const googleTtsChinese = 'Google TTS (zh-CN)';
+
+  /// OpenAI Whisper transcription (whisper-1)
+  static const openaiWhisper = 'OpenAI Whisper (whisper-1)';
 }

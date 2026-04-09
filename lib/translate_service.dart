@@ -59,45 +59,50 @@ class TranslateService {
     }
   }
 
-  /// 获取泰语的罗马拼音（romanization→'
-  static Future<String?> getThaiRomanization(String thaiText) async {
-    if (thaiText.trim().isEmpty) return null;
+  /// 使用 Google Translate 免费 API 将中文翻译为泰语
+  static Future<String?> chineseToThai(String text) =>
+      translate(text, targetLang: 'th', sourceLang: 'zh_CN');
+
+  /// Fetch a sample sentence containing [word] from Google Translate's
+  /// example corpus (dt=ex). Returns the first source-language example with
+  /// HTML tags stripped, or null if none found.
+  static Future<String?> getSampleSentence(String word,
+      {String sourceLang = 'th'}) async {
+    if (word.trim().isEmpty) return null;
+    final sl = _toGoogleLang(sourceLang);
 
     final uri = Uri.https(
       'translate.googleapis.com',
       '/translate_a/single',
       {
         'client': 'gtx',
-        'sl': 'th',
-        'tl': 'en',
-        'dt': 'rm',
-        'q': thaiText,
+        'sl': sl,
+        'tl': 'en', // target lang is required; source examples are in sl regardless
+        'dt': 'ex',
+        'q': word,
       },
     );
 
     try {
       final response =
-          await http.get(uri).timeout(const Duration(seconds: 10));
+          await http.get(uri).timeout(const Duration(seconds: 15));
       if (response.statusCode != 200) return null;
       final data = jsonDecode(response.body);
-      if (data is List && data.isNotEmpty && data[0] is List) {
-        final buffer = StringBuffer();
-        for (final seg in data[0] as List) {
-          if (seg is List && seg.length > 3 && seg[3] is String) {
-            buffer.write(seg[3]);
-          }
-        }
-        final result = buffer.toString().trim();
-        if (result.isNotEmpty) return result;
-      }
-      return null;
+      if (data is! List || data.length <= 13) return null;
+      final exBlock = data[13];
+      if (exBlock is! List || exBlock.isEmpty) return null;
+      final exList = exBlock[0];
+      if (exList is! List || exList.isEmpty) return null;
+      final firstEx = exList[0];
+      if (firstEx is! List || firstEx.isEmpty) return null;
+      final raw = firstEx[0];
+      if (raw is! String) return null;
+      // Strip HTML tags (<b>, </b>, etc.) left by Google
+      final clean = raw.replaceAll(RegExp(r'<[^>]*>'), '').trim();
+      return clean.isEmpty ? null : clean;
     } catch (_) {
       return null;
     }
   }
-
-  /// 使用 Google Translate 免费 API 将中文翻译为泰语
-  static Future<String?> chineseToThai(String text) =>
-      translate(text, targetLang: 'th', sourceLang: 'zh_CN');
 }
 

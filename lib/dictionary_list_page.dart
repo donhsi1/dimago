@@ -1,24 +1,28 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'database_helper.dart';
 import 'edge_tts_service.dart';
 import 'settings_page.dart'; // DictPrefs
 import 'language_prefs.dart';
+import 'lesson_picker_dialog.dart';
+import 'help_tooltip.dart';
 
 // ── 排序枚举 ──────────────────────────────────────────────────
 enum SortField { correctCount, createdAt, lastUsedAt }
 
 enum SortDir { desc, asc }
 
-// ── 筛选模式（category id: null=全部, -999=收藏）─────────────
-const _kFavoriteId = -999;
-
 // ── SharedPreferences keys（仅排序，category →SharedCategoryPrefs）──
 const _kSortField = 'dict_sort_field';
 const _kSortDir = 'dict_sort_dir';
 
 class DictionaryListPage extends StatefulWidget {
-  const DictionaryListPage({super.key});
+  final VoidCallback? onWordChanged;
+  /// If set, the page opens pre-filtered to this category id.
+  final int? initialCategoryId;
+  /// When true, renders without its own Scaffold AppBar (used inside LessonPage).
+  final bool embedded;
+  const DictionaryListPage({super.key, this.onWordChanged, this.initialCategoryId, this.embedded = false});
 
   @override
   State<DictionaryListPage> createState() => _DictionaryListPageState();
@@ -29,10 +33,9 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
   List<DictionaryEntry> _filtered = [];
   List<CategoryEntry> _categories = [];
 
-  // null = 全部, _kFavoriteId = 收藏, 正整→'= 具体类别
-  int? _selectedCategoryId; // null 表示全部，_kFavoriteId 表示收藏
+  // null = 全部，正整数 = 具体类别
+  int? _selectedCategoryId;
 
-  String _searchText = '';
   bool _loading = true;
 
   // ── 排序（带持久化）──────────────────────────────────────────
@@ -41,8 +44,6 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
 
   // ── 热度满格基准 ──────────────────────────────────────────────
   int _maxCorrectCount = DictPrefs.defaultMaxCorrectCount;
-
-  final TextEditingController _searchCtrl = TextEditingController();
 
   // TTS
   final EdgeTTSService _tts = EdgeTTSService();
@@ -66,8 +67,13 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
     if (di != null && di < SortDir.values.length) {
       _sortDir = SortDir.values[di];
     }
-    // 类别筛选：与主页面共享
-    _selectedCategoryId = await SharedCategoryPrefs.load();
+    // If opened with a specific category (from LessonPage), use that.
+    // Otherwise fall back to the shared saved preference.
+    if (widget.initialCategoryId != null) {
+      _selectedCategoryId = widget.initialCategoryId;
+    } else {
+      _selectedCategoryId = await SharedCategoryPrefs.load();
+    }
   }
 
   Future<void> _savePrefs() async {
@@ -94,8 +100,7 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
         // Validate saved category id: if it's not in the current category list,
         // or if no entry has that categoryId (e.g. all categoryId==null),
         // fall back to "show all" to avoid a permanently blank list.
-        if (_selectedCategoryId != null &&
-            _selectedCategoryId != _kFavoriteId) {
+        if (_selectedCategoryId != null) {
           final validCatIds = cats.map((c) => c.id).toSet();
           if (!validCatIds.contains(_selectedCategoryId)) {
             _selectedCategoryId = null;
@@ -111,10 +116,7 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
   void _applyFilterAndSort() {
     List<DictionaryEntry> list;
 
-    if (_selectedCategoryId == _kFavoriteId) {
-      // 收藏筛→'
-      list = _allEntries.where((e) => e.isFavorite).toList();
-    } else if (_selectedCategoryId != null) {
+    if (_selectedCategoryId != null) {
       // 具体类别
       list = _allEntries.where((e) => e.categoryId == _selectedCategoryId).toList();
       // Safety: if category filter yields nothing but entries exist, fallback to all
@@ -124,16 +126,7 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
         list = _allEntries;
       }
     } else {
-      // 全部
       list = _allEntries;
-    }
-
-    // 搜索
-    final q = _searchText.trim();
-    if (q.isNotEmpty) {
-      list = list
-          .where((e) => e.chinese.contains(q) || e.thai.contains(q))
-          .toList();
     }
 
     // 排序
@@ -162,34 +155,11 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
     await _tts.stop();
     setState(() => _playingId = entry.id);
     if (entry.id != null) await DatabaseHelper.updateLastUsed(entry.id!);
-    final targetLang = AppLangNotifier().targetLang;
-    // 播放源语言（学习语言）的发音
-    await _tts.speak(entry.srcText(targetLang),
+    // 播放 translate language 的发音
+    await _tts.speak(entry.nameTranslate,
         wordId: entry.id, onDone: () {
       if (mounted) setState(() => _playingId = null);
     });
-  }
-
-  // ── 切换收藏 ─────────────────────────────────────────────────
-  Future<void> _toggleFavorite(DictionaryEntry entry) async {
-    if (entry.id == null) return;
-    final newFav = await DatabaseHelper.toggleFavorite(entry.id!, entry.isFavorite);
-    // 更新本地列表中的该条→'
-    final idx = _allEntries.indexWhere((e) => e.id == entry.id);
-    if (idx < 0) return;
-    final old = _allEntries[idx];
-    _allEntries[idx] = DictionaryEntry(
-      id: old.id,
-      word: old.word,
-      translation: old.translation,
-      createdAt: old.createdAt,
-      lastUsedAt: old.lastUsedAt,
-      correctCount: old.correctCount,
-      categoryId: old.categoryId,
-      categoryName: old.categoryName,
-      isFavorite: newFav,
-    );
-    setState(() => _applyFilterAndSort());
   }
 
   // ── 修改类别弹窗 ─────────────────────────────────────────────
@@ -203,17 +173,21 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
         return StatefulBuilder(
           builder: (ctx, setS) => AlertDialog(
             title: Text(l.dictChangeCat, style: const TextStyle(fontSize: 16)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: _categories
-                  .map((cat) => RadioListTile<int?>(
-                        dense: true,
-                        title: Text(cat.name),
-                        value: cat.id,
-                        groupValue: chosen,
-                        onChanged: (v) => setS(() => chosen = v),
-                      ))
-                  .toList(),
+            content: SizedBox(
+              width: double.maxFinite,
+              height: (_categories.length.clamp(1, 8)) * 48.0,
+              child: ListView(
+                shrinkWrap: true,
+                children: _categories
+                    .map((cat) => RadioListTile<int?>(
+                          dense: true,
+                          title: Text(cat.name),
+                          value: cat.id,
+                          groupValue: chosen,
+                          onChanged: (v) => setS(() => chosen = v),
+                        ))
+                    .toList(),
+              ),
             ),
             actions: [
               TextButton(
@@ -276,7 +250,6 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
   @override
   void dispose() {
     _tts.dispose();
-    _searchCtrl.dispose();
     super.dispose();
   }
 
@@ -289,44 +262,168 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
     SharedCategoryPrefs.save(catId);
   }
 
-  // ── 下拉菜单构建 ──────────────────────────────────────────────
-  // 下拉值：null=全部, _kFavoriteId=收藏, 正数=类别id
-  String _dropdownLabel(int? id, L10n l) {
+  // ── 当前筛选标签（显示在 Lesson 按钮右侧）──────────────────────
+  String _activeLessonLabel(L10n l) {
+    final id = _selectedCategoryId;
     if (id == null) {
-      final count = _allEntries.length;
-      return '${l.practiceAll} ($count)';
-    }
-    if (id == _kFavoriteId) {
-      final count = _allEntries.where((e) => e.isFavorite).length;
-      return '${l.practiceFavorite} ($count)';
+      return '${l.practiceAll} (${_allEntries.length})';
     }
     final cat = _categories.firstWhere(
       (c) => c.id == id,
-      orElse: () => CategoryEntry(name: ''),
+      orElse: () => CategoryEntry(nameNative: ''),
     );
-    if (cat.name.isEmpty) return l.practiceAll;
+    if (cat.nameNative.isEmpty) return l.practiceAll;
     final count = _allEntries.where((e) => e.categoryId == id).length;
-    return '${l.translateCategory(cat.name)} ($count)';
+    return '${cat.nameNative} ($count)';
+  }
+
+  // ── Lesson picker popup (identical style to Practice page) ───
+  void _showLessonPicker(L10n l) {
+    showDialog(
+      context: context,
+      builder: (ctx) => LessonPickerDialog(
+        categories: _categories,
+        selectedId: _selectedCategoryId,
+        challengeBgColor: challengeBgColor,
+        challengeTextColor: challengeTextColor,
+        onSelected: (id) {
+          Navigator.of(ctx).pop();
+          _setCategory(id);
+        },
+      ),
+    );
+  }
+
+  Widget _buildBody(L10n l) {
+    if (_loading) return const Center(child: CircularProgressIndicator());
+
+    return Column(
+      children: [
+        // ── 课程筛选 / 嵌入时简化标题栏 ──────────────────────────
+        if (widget.embedded)
+          Container(
+            color: const Color(0xFFF5F7FF),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Text(
+              _activeLessonLabel(l),
+              style: const TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF1565C0),
+                  fontWeight: FontWeight.w500),
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        else
+          Container(
+            color: const Color(0xFFF5F7FF),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => _showLessonPicker(l),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1565C0).withOpacity(0.10),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                          color: const Color(0xFF1565C0).withOpacity(0.45)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.menu_book_outlined,
+                            size: 14, color: Color(0xFF1565C0)),
+                        const SizedBox(width: 4),
+                        Text(
+                          l.lessonLabel,
+                          style: const TextStyle(
+                            color: Color(0xFF1565C0),
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 3),
+                        const Icon(Icons.keyboard_arrow_down,
+                            size: 15, color: Color(0xFF1565C0)),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    _activeLessonLabel(l),
+                    style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF1565C0),
+                        fontWeight: FontWeight.w500),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        // ── 词条列表 ───────────────────────────────────────────
+        Expanded(
+          child: _filtered.isEmpty
+              ? Center(
+                  child: Text(
+                    l.dictEmpty,
+                    style: const TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
+                )
+              : ListView.separated(
+                  itemCount: _filtered.length,
+                  separatorBuilder: (_, __) =>
+                      const Divider(height: 1, indent: 56),
+                  itemBuilder: (_, index) {
+                    final e = _filtered[index];
+                    final isPlaying = _playingId == e.id;
+                    return _EntryTile(
+                      entry: e,
+                      isPlaying: isPlaying,
+                      maxCorrectCount: _maxCorrectCount,
+                      categories: _categories,
+                      onPlay: () => _speak(e),
+                      onChangeCategory: () => _showChangeCategoryDialog(e),
+                      formatTime: _formatTime,
+                    );
+                  },
+                ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // 下拉选项值列表（收藏在第二位，紧随全部之后）
-    final dropdownValues = <int?>[
-      null, // 全部
-      _kFavoriteId, // 收藏（第二位→'
-      ..._categories.map((c) => c.id),
-    ];
     final l = L10n(AppLangNotifier().uiLang);
+
+    if (widget.embedded) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: _buildBody(l),
+      );
+    }
+
+    final appBarColor = widget.initialCategoryId != null
+        ? const Color(0xFF64B5F6)
+        : const Color(0xFF1565C0);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1565C0),
+        backgroundColor: appBarColor,
         foregroundColor: Colors.white,
         title: Row(
           children: [
-            Text(l.dictPageTitle,
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              widget.initialCategoryId != null ? l.lessonLabel : l.dictPageTitle,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(width: 8),
             if (!_loading)
               Text(
@@ -337,7 +434,7 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
           ],
         ),
         actions: [
-          Tooltip(
+          HelpTooltip(
             message:
                 '${_sortFieldLabel(_sortField, l)} ${_sortDir == SortDir.desc ? "↓" : "↑"}',
             child: IconButton(
@@ -347,115 +444,7 @@ class _DictionaryListPageState extends State<DictionaryListPage> {
           ),
         ],
       ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                // ── 搜索→─────────────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
-                  child: TextField(
-                    controller: _searchCtrl,
-                    decoration: InputDecoration(
-                      hintText: l.dictSearch,
-                      prefixIcon: const Icon(Icons.search, size: 20),
-                      suffixIcon: _searchText.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.clear, size: 18),
-                              onPressed: () {
-                                _searchCtrl.clear();
-                                setState(() {
-                                  _searchText = '';
-                                  _applyFilterAndSort();
-                                });
-                              },
-                            )
-                          : null,
-                      isDense: true,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 12),
-                    ),
-                    onChanged: (v) {
-                      setState(() {
-                        _searchText = v;
-                        _applyFilterAndSort();
-                      });
-                    },
-                  ),
-                ),
-
-                // ── 类别下拉筛选栏 ──────────────────────────────
-                Container(
-                  color: const Color(0xFFF5F7FF),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 4),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: DropdownButton<int?>(
-                          value: dropdownValues.contains(_selectedCategoryId)
-                              ? _selectedCategoryId
-                              : null,
-                          isExpanded: true,
-                          underline: const SizedBox(),
-                          menuMaxHeight: 8 * 48.0, // max 8 items visible
-                          style: const TextStyle(
-                              fontSize: 13,
-                              color: Color(0xFF1565C0),
-                              fontWeight: FontWeight.w500),
-                          icon: const Icon(Icons.keyboard_arrow_down,
-                              color: Color(0xFF1565C0)),
-                          items: dropdownValues
-                              .map((v) => DropdownMenuItem<int?>(
-                                    value: v,
-                                    child: Text(
-                                      _dropdownLabel(v, l),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ))
-                              .toList(),
-                          onChanged: (v) => _setCategory(v),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // ── 词条列表 ───────────────────────────────────
-                Expanded(
-                  child: _filtered.isEmpty
-                      ? Center(
-                          child: Text(
-                            _searchText.isNotEmpty ? l.dictNoResult : l.dictEmpty,
-                            style:
-                                const TextStyle(color: Colors.grey, fontSize: 16),
-                          ),
-                        )
-                      : ListView.separated(
-                          itemCount: _filtered.length,
-                          separatorBuilder: (_, __) =>
-                              const Divider(height: 1, indent: 56),
-                          itemBuilder: (_, index) {
-                            final e = _filtered[index];
-                            final isPlaying = _playingId == e.id;
-                            return _EntryTile(
-                              entry: e,
-                              isPlaying: isPlaying,
-                              maxCorrectCount: _maxCorrectCount,
-                              categories: _categories,
-                              onPlay: () => _speak(e),
-                              onChangeCategory: () =>
-                                  _showChangeCategoryDialog(e),
-                              onToggleFavorite: () => _toggleFavorite(e),
-                              formatTime: _formatTime,
-                            );
-                          },
-                        ),
-                ),
-              ],
-            ),
+      body: _buildBody(l),
     );
   }
 }
@@ -679,7 +668,6 @@ class _EntryTile extends StatelessWidget {
   final List<CategoryEntry> categories;
   final VoidCallback onPlay;
   final VoidCallback onChangeCategory;
-  final VoidCallback onToggleFavorite;
   final String Function(String?) formatTime;
 
   const _EntryTile({
@@ -689,27 +677,23 @@ class _EntryTile extends StatelessWidget {
     required this.categories,
     required this.onPlay,
     required this.onChangeCategory,
-    required this.onToggleFavorite,
     required this.formatTime,
   });
 
   @override
   Widget build(BuildContext context) {
     final e = entry;
-    final notifier = AppLangNotifier();
-    final srcTxt = e.srcText(notifier.targetLang);
-    final dstTxt = e.dstText(notifier.nativeLang);
-
-    // 热度比例→'.0 ~ 1.0→'
+    // 热度比例 0.0 ~ 1.0
     final ratio = maxCorrectCount > 0
         ? (e.correctCount / maxCorrectCount).clamp(0.0, 1.0)
         : 0.0;
 
-    // →categoryId 查找 nativeDB category（中文）
-    final nativeCatName = categories.firstWhere(
-      (c) => c.id == e.categoryId,
-      orElse: () => CategoryEntry(name: 'general'),
-    ).name;
+    // Resolve native category name from the category list
+    final nativeCatName = e.categoryNameNative ??
+        categories.firstWhere(
+          (c) => c.id == e.categoryId,
+          orElse: () => CategoryEntry(nameNative: ''),
+        ).nameNative;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -739,9 +723,9 @@ class _EntryTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 源语言（学习语言→'
+                // Translate language (word being learned)
                 Text(
-                  srcTxt,
+                  e.nameTranslate,
                   style: TextStyle(
                     fontSize: 20,
                     color: isPlaying
@@ -752,9 +736,9 @@ class _EntryTile extends StatelessWidget {
                         : FontWeight.w500,
                   ),
                 ),
-                // 翻译语言
+                // Native language (translation)
                 Text(
-                  dstTxt,
+                  e.nameNative,
                   style: const TextStyle(
                       fontSize: 14, color: Colors.black54),
                 ),
@@ -820,67 +804,42 @@ class _EntryTile extends StatelessWidget {
 
           const SizedBox(width: 8),
 
-          // ── 右侧固定区：category 按钮 + 收藏图标 ────────────
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // category 按钮（显→nativeDB 中文类名→'
-              GestureDetector(
-                onTap: onChangeCategory,
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 80),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1565C0).withOpacity(0.10),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: const Color(0xFF1565C0).withOpacity(0.4),
+          // ── 右侧：category 按钮 ────────────
+          GestureDetector(
+            onTap: onChangeCategory,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 80),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1565C0).withOpacity(0.10),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  color: const Color(0xFF1565C0).withOpacity(0.4),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      nativeCatName,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Color(0xFF1565C0),
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          nativeCatName,  // 显示中文类名（来→nativeDB.category→'
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Color(0xFF1565C0),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 3),
-                      const Icon(Icons.edit,
-                          size: 10, color: Color(0xFF1565C0)),
-                    ],
-                  ),
-                ),
+                  const SizedBox(width: 3),
+                  const Icon(Icons.edit, size: 10, color: Color(0xFF1565C0)),
+                ],
               ),
-              const SizedBox(height: 6),
-              // 收藏心形图标（固定在 category 下方，大点击区域→'
-              GestureDetector(
-                onTap: onToggleFavorite,
-                child: SizedBox(
-                  width: 44,
-                  height: 36,
-                  child: Icon(
-                    e.isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    size: 26,
-                    color: e.isFavorite
-                        ? Colors.red.shade400
-                        : Colors.grey.shade400,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
 }
+

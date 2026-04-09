@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'language_prefs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -100,10 +100,13 @@ class _SettingsLanguagePageState extends State<SettingsLanguagePage> {
         Navigator.of(context).pop(true);
       }
     } else {
-      if (ok) {
-        // Pop all the way back to home (settings -> settings_language -> pop twice)
-        int count = 0;
-        Navigator.of(context).popUntil((_) => count++ >= 2);
+      /// Settings → Language is one `Navigator.push` on top of [_AppShell].
+      /// Popping twice would remove the shell and leave a black / empty screen.
+      if (ok && mounted) {
+        final nav = Navigator.of(context);
+        if (nav.canPop()) {
+          nav.pop();
+        }
       }
     }
   }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Must match OAuth client JSON (installed / web client id) for google_sign_in on Android. -->
+    <string name="default_web_client_id">327903108748-0quo28ikfd9t0sa6bftrp0sp0vcliv37.apps.googleusercontent.com</string>
+</resources>

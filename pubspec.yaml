@@ -31,12 +31,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.8
   sqflite_common_ffi: ^2.3.4+4   # SQLite for Windows desktop
   sqflite: ^2.3.3
   path: ^1.9.0
   http: ^1.2.2
-  flutter_tts: ^4.2.0
   audioplayers: ^6.1.0
   path_provider: ^2.1.4
   crypto: ^3.0.3
@@ -44,11 +42,17 @@ dependencies:
   timezone: ^0.9.4
   flutter_timezone: ^5.0.0
   shared_preferences: ^2.3.3
-  file_picker: ^8.1.2
-  excel: ^4.0.6
-  google_sign_in: ^6.1.4
   url_launcher: ^6.2.6
   record: ^5.0.0
+  flutter_svg: ^2.0.10+1
+  font_awesome_flutter: ^11.0.0
+  supabase_flutter: ^2.12.2
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^7.0.1
+  permission_handler: ^12.0.1
+  flutter_screen_recording:
+    path: packages/flutter_screen_recording
+  video_player: ^2.11.1
 
 dependency_overrides:
   record_linux: ^1.3.0
@@ -76,6 +80,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
+    - client_secret_327903108748-0quo28ikfd9t0sa6bftrp0sp0vcliv37.apps.googleusercontent.com.json
+    - assets/supabase_config.json
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

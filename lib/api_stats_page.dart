@@ -1,5 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'api_log_service.dart';
+import 'whisper_asr_service.dart';
 
 /// Displays cumulative API call counts.
 /// Accessible from the app's main menu under "Show API".
@@ -78,19 +79,51 @@ class _ApiStatsPageState extends State<ApiStatsPage> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _stats.isEmpty
-              ? const Center(
+              ? Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.bar_chart, size: 64, color: Colors.black26),
-                      SizedBox(height: 12),
-                      Text('No API calls recorded yet.',
+                      if (!WhisperAsrService.isApiKeyConfigured) ...[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Material(
+                            color: Colors.orange.shade50,
+                            borderRadius: BorderRadius.circular(8),
+                            child: const Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Text(
+                                'Talk / Whisper: OPENAI_API_KEY is empty in this build. '
+                                'Release APKs from scripts/build_android_release.ps1 embed the key; '
+                                'debug runs need --dart-define=OPENAI_API_KEY=...',
+                                style: TextStyle(fontSize: 13, height: 1.35),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                      const Icon(Icons.bar_chart, size: 64, color: Colors.black26),
+                      const SizedBox(height: 12),
+                      const Text('No API calls recorded yet.',
                           style: TextStyle(color: Colors.black45)),
                     ],
                   ),
                 )
               : Column(
                   children: [
+                    if (!WhisperAsrService.isApiKeyConfigured)
+                      Container(
+                        width: double.infinity,
+                        color: Colors.orange.shade100,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        child: const Text(
+                          'Whisper: OPENAI_API_KEY missing in this build — '
+                          'successful transcriptions will not be counted and Talk scores stay at 0.',
+                          style: TextStyle(fontSize: 12, height: 1.35),
+                        ),
+                      ),
                     // ── Summary banner ────────────────────────────
                     Container(
                       width: double.infinity,

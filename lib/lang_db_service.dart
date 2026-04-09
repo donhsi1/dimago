@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -7,14 +7,74 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'language_prefs.dart';
 import 'database_helper.dart';
+import 'talk_asr_service.dart';
+import 'supabase_vocab_hydrator.dart';
+import 'supabase_bootstrap.dart';
 
-// ── Language code →DB filename ───────────────────────────────
+// ── Language code → DB filename ──────────────────────────────
 class LangDbService {
-  /// GitHub raw base URL for dict_xx.db files
+  /// GitHub raw base URL for dict files
   static const _baseUrl =
-      'https://raw.githubusercontent.com/donhsi1/dimago/main/dict';
+      'https://raw.githubusercontent.com/donhsi1/dimago/main';
 
-  /// Map language code →dict filename (canonical casing)
+  /// Raw GitHub often returns 403/429 without a browser-like User-Agent.
+  static void _browserLikeHeaders(http.BaseRequest request) {
+    request.headers['User-Agent'] =
+        'Dimago/1.0 (Flutter; vocabulary; +https://github.com/donhsi1/dimago)';
+    request.headers['Accept'] = '*/*';
+  }
+
+  /// Map language code → 2-letter uppercase code used in combined filenames
+  static String _code(String langCode) {
+    const map = <String, String>{
+      'th':    'TH',
+      'zh_CN': 'CN',
+      'zh_TW': 'TW',
+      'en_US': 'EN',
+      'fr':    'FR',
+      'de':    'DE',
+      'it':    'IT',
+      'es':    'ES',
+      'ja':    'JA',
+      'ko':    'KO',
+      'my':    'MY',
+      'he':    'HE',
+      'ru':    'RU',
+      'uk':    'UK',
+    };
+    return map[langCode] ?? langCode.toUpperCase();
+  }
+
+  /// Combined DB filename for a language pair.
+  /// e.g. dbFileNamePair('th', 'zh_CN') → 'dict_TH_CN.db'
+  static String dbFileNamePair(String translateLang, String nativeLang) {
+    return 'dict_${_code(translateLang)}_${_code(nativeLang)}.db';
+  }
+
+  /// Stable, filesystem-safe user key for namespacing local DB files.
+  /// Requires a signed-in Supabase user.
+  static String currentDbUserKey() {
+    final uid = SupabaseBootstrap.clientOrNull?.auth.currentUser?.id;
+    if (uid == null || uid.trim().isEmpty) {
+      throw StateError(
+        'Signed-in user required for local DB path. '
+        'Complete credential login before opening/downloading SQLite.',
+      );
+    }
+    final safe = uid.replaceAll(RegExp(r'[^A-Za-z0-9_-]'), '_');
+    return safe;
+  }
+
+  /// User-scoped DB filename for a language pair.
+  /// Example: `dict_TH_CN__u_8f2d....db`
+  static String dbFileNamePairForCurrentUser(
+      String translateLang, String nativeLang) {
+    final base = dbFileNamePair(translateLang, nativeLang);
+    final userKey = currentDbUserKey();
+    return base.replaceFirst('.db', '__u_$userKey.db');
+  }
+
+  /// Single-language DB filename (legacy / deprecated).
   static String dbFileName(String langCode) {
     const map = <String, String>{
       'th':    'dict_TH.db',
@@ -38,16 +98,17 @@ class LangDbService {
   static String downloadUrl(String langCode) =>
       '$_baseUrl/${dbFileName(langCode)}';
 
+  static String downloadUrlPair(String translateLang, String nativeLang) =>
+      '$_baseUrl/${dbFileNamePair(translateLang, nativeLang)}';
+
   // ── Photo DB ──────────────────────────────────────────────────
   static const _photoDbName = 'dict_photo.db';
   static String get photoDbUrl => '$_baseUrl/$_photoDbName';
 
   // ── Photo image sandbox ───────────────────────────────────────
-  /// GitHub raw base URL for individual photo PNG files
   static const _photoImgBase =
       'https://raw.githubusercontent.com/donhsi1/dimago/main/photo';
 
-  /// Local sandbox directory where downloaded PNG images are stored.
   static Future<Directory> photoSandboxDir() async {
     final base = await getApplicationDocumentsDirectory();
     final dir = Directory(p.join(base.path, 'photo_cache'));
@@ -55,18 +116,12 @@ class LangDbService {
     return dir;
   }
 
-  /// Returns the local File for a given English photo name (without extension).
   static Future<File> photoLocalFile(String englishName) async {
     final dir = await photoSandboxDir();
     final safeName = englishName.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
     return File(p.join(dir.path, '$safeName.png'));
   }
 
-  /// Resolves a photo PNG for [englishName]:
-  /// 1. If local file exists →returns its bytes immediately.
-  /// 2. Otherwise downloads from GitHub dimago/photo/<englishName>.png,
-  ///    saves to sandbox, and returns bytes.
-  /// Returns null on any error (not found, network failure, etc.).
   static Future<Uint8List?> resolvePhotoImage(String englishName) async {
     try {
       final local = await photoLocalFile(englishName);
@@ -74,8 +129,6 @@ class LangDbService {
         final bytes = await local.readAsBytes();
         if (bytes.isNotEmpty) return bytes;
       }
-
-      // Download from GitHub
       final safeName = englishName.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
       final url = '$_photoImgBase/$safeName.png';
       final response = await http.get(Uri.parse(url)).timeout(
@@ -84,7 +137,6 @@ class LangDbService {
       if (response.statusCode != 200 || response.bodyBytes.isEmpty) {
         return null;
       }
-      // Save to sandbox
       await local.writeAsBytes(response.bodyBytes);
       return response.bodyBytes;
     } catch (_) {
@@ -116,16 +168,34 @@ class LangDbService {
     CancelToken? cancelToken,
   }) async {
     final destPath = await photoDbLocalPath();
-    final req = http.Request('GET', Uri.parse(photoDbUrl));
-    final resp = await http.Client().send(req);
-    if (resp.statusCode != 200) {
+    final candidates = <String>[
+      photoDbUrl,
+      'https://cdn.jsdelivr.net/gh/donhsi1/dimago@main/$_photoDbName',
+    ];
+
+    http.StreamedResponse? response;
+    for (final url in candidates) {
+      final req = http.Request('GET', Uri.parse(url));
+      _browserLikeHeaders(req);
+      final resp = await http.Client().send(req);
+      if (resp.statusCode == 200) {
+        response = resp;
+        break;
+      }
       await resp.stream.drain<void>();
-      throw Exception('Failed to download dict_photo.db (${resp.statusCode})');
     }
-    final total = resp.contentLength ?? -1;
+
+    if (response == null) {
+      throw Exception(
+        'Failed to download dict_photo.db after ${candidates.length} sources.\n'
+        'Check network or try again later (optional file).',
+      );
+    }
+
+    final total = response.contentLength ?? -1;
     int received = 0;
     final sink = File(destPath).openWrite();
-    await for (final chunk in resp.stream) {
+    await for (final chunk in response.stream) {
       if (cancelToken?.isCancelled == true) {
         await sink.close();
         try { File(destPath).deleteSync(); } catch (_) {}
@@ -140,33 +210,88 @@ class LangDbService {
     return destPath;
   }
 
-  /// Local path where a downloaded DB file is stored.
-  /// Always uses the canonical (uppercase) filename.
+  // ── Combined-DB path helpers ─────────────────────────────────
+
+  /// Local path for the combined language-pair DB.
+  static Future<String> localPathPair(
+      String translateLang, String nativeLang) async {
+    final dir = await getApplicationDocumentsDirectory();
+    return p.join(
+      dir.path,
+      dbFileNamePairForCurrentUser(translateLang, nativeLang),
+    );
+  }
+
+  /// Check if the combined DB file is already downloaded and valid.
+  static Future<bool> isDownloadedPair(
+      String translateLang, String nativeLang) async {
+    final path = await localPathPair(translateLang, nativeLang);
+    return _isSqliteFile(path);
+  }
+
+  /// Download the combined language-pair DB.
+  static Future<String> downloadPair(
+    String translateLang,
+    String nativeLang, {
+    void Function(int received, int total)? onProgress,
+    CancelToken? cancelToken,
+  }) async {
+    final destPath = await localPathPair(translateLang, nativeLang);
+    final base = dbFileNamePair(translateLang, nativeLang);
+
+    final candidates = <String>{
+      '$_baseUrl/$base',
+      '$_baseUrl/${base.toLowerCase()}',
+    }.toList();
+
+    http.StreamedResponse? response;
+    for (final url in candidates) {
+      final req = http.Request('GET', Uri.parse(url));
+      _browserLikeHeaders(req);
+      final resp = await http.Client().send(req);
+      if (resp.statusCode == 200) {
+        response = resp;
+        break;
+      }
+      await resp.stream.drain<void>();
+    }
+
+    if (response == null) {
+      throw Exception(
+          'No combined database found for "$translateLang"/"$nativeLang".\n'
+          'Tried: ${candidates.join(', ')}');
+    }
+
+    final total = response.contentLength ?? -1;
+    int received = 0;
+    final sink = File(destPath).openWrite();
+    await for (final chunk in response.stream) {
+      if (cancelToken?.isCancelled == true) {
+        await sink.close();
+        try { File(destPath).deleteSync(); } catch (_) {}
+        throw Exception('cancelled');
+      }
+      sink.add(chunk);
+      received += chunk.length;
+      onProgress?.call(received, total);
+    }
+    await sink.close();
+    await _verifySqliteFile(destPath, '$translateLang/$nativeLang');
+    return destPath;
+  }
+
+  // ── Legacy single-lang helpers (backward compat) ─────────────
+
   static Future<String> localPath(String langCode) async {
     final dir = await getApplicationDocumentsDirectory();
     return p.join(dir.path, dbFileName(langCode));
   }
 
-  /// Check if local DB file already exists AND is a valid SQLite database with content.
   static Future<bool> isDownloaded(String langCode) async {
     final path = await localPath(langCode);
-    final file = File(path);
-    if (!file.existsSync()) return false;
-    // Must be a valid SQLite file (starts with SQLite magic header) and > 100 bytes
-    try {
-      final bytes = await file.readAsBytes();
-      if (bytes.length < 100) return false;
-      final magic = String.fromCharCodes(bytes.sublist(0, 15));
-      return magic.startsWith('SQLite format 3');
-    } catch (_) {
-      return false;
-    }
+    return _isSqliteFile(path);
   }
 
-  /// Download a DB file with progress callback.
-  /// Tries uppercase, lowercase, and mixed-case variants to be case-insensitive.
-  /// After download, verifies the file is a valid SQLite database.
-  /// Returns local file path on success, throws on failure.
   static Future<String> download(
     String langCode, {
     void Function(int received, int total)? onProgress,
@@ -175,7 +300,6 @@ class LangDbService {
     final destPath = await localPath(langCode);
     final base = dbFileName(langCode);
 
-    // Build candidate URLs: canonical, lowercase, uppercase
     final candidates = <String>{
       '$_baseUrl/$base',
       '$_baseUrl/${base.toLowerCase()}',
@@ -185,6 +309,7 @@ class LangDbService {
     http.StreamedResponse? response;
     for (final url in candidates) {
       final req = http.Request('GET', Uri.parse(url));
+      _browserLikeHeaders(req);
       final resp = await http.Client().send(req);
       if (resp.statusCode == 200) {
         response = resp;
@@ -201,7 +326,6 @@ class LangDbService {
 
     final total = response.contentLength ?? -1;
     int received = 0;
-
     final sink = File(destPath).openWrite();
     await for (final chunk in response.stream) {
       if (cancelToken?.isCancelled == true) {
@@ -214,28 +338,38 @@ class LangDbService {
       onProgress?.call(received, total);
     }
     await sink.close();
-
-    // Verify the downloaded file is a valid SQLite database
     await _verifySqliteFile(destPath, langCode);
-
     return destPath;
   }
 
-  /// Checks the SQLite magic header bytes.
-  /// Deletes the file and throws if invalid.
-  static Future<void> _verifySqliteFile(String path, String langCode) async {
+  // ── Internal helpers ─────────────────────────────────────────
+
+  static Future<bool> _isSqliteFile(String path) async {
+    final file = File(path);
+    if (!file.existsSync()) return false;
+    try {
+      final bytes = await file.readAsBytes();
+      if (bytes.length < 100) return false;
+      return String.fromCharCodes(bytes.sublist(0, 15))
+          .startsWith('SQLite format 3');
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<void> _verifySqliteFile(String path, String label) async {
     final file = File(path);
     final bytes = await file.readAsBytes();
     if (bytes.length < 100) {
       await file.delete();
       throw Exception(
-          'Database for "$langCode" is too small →possibly empty or corrupt.');
+          'Database for "$label" is too small — possibly empty or corrupt.');
     }
     final magic = String.fromCharCodes(bytes.sublist(0, 15));
     if (!magic.startsWith('SQLite format 3')) {
       await file.delete();
       throw Exception(
-          'Downloaded file for "$langCode" is not a valid SQLite database.');
+          'Downloaded file for "$label" is not a valid SQLite database.');
     }
   }
 }
@@ -248,8 +382,8 @@ class CancelToken {
 }
 
 // ── Download Progress Dialog ──────────────────────────────────
-/// Shows a dialog that downloads both learn-lang and native-lang databases.
-/// Returns true when both are downloaded and verified successfully.
+/// Shows a dialog that downloads ONE combined language-pair database.
+/// Returns true when downloaded and verified successfully.
 Future<bool> showLangDbDownloadDialog(
   BuildContext context, {
   required String learnLang,
@@ -286,9 +420,8 @@ enum _DownloadStatus { idle, downloading, done, error }
 class _LangDbDownloadDialogState extends State<_LangDbDownloadDialog> {
   _DownloadStatus _status = _DownloadStatus.idle;
   String _message = '';
-  double _progress1 = 0; // learn lang
-  double _progress2 = 0; // native lang
-  double _progress3 = 0; // photo db
+  double _progressDb  = 0; // combined DB
+  double _progressPhoto = 0; // photo db
   String _errorMsg = '';
   final CancelToken _cancel = CancelToken();
 
@@ -310,106 +443,111 @@ class _LangDbDownloadDialogState extends State<_LangDbDownloadDialog> {
     setState(() {
       _status = _DownloadStatus.downloading;
       _message = '';
-      _progress1 = 0;
-      _progress2 = 0;
-      _progress3 = 0;
+      _progressDb    = 0;
+      _progressPhoto = 0;
     });
 
     try {
+      final nativeL = L10n(widget.nativeLang);
       final learnLabel  = _langLabel(widget.learnLang);
       final nativeLabel = _langLabel(widget.nativeLang);
+      final pairLabel   = '$learnLabel / $nativeLabel';
 
-      // ── Delete existing files if force redownload ──
+      // ── Delete existing file if force redownload ──
       if (widget.forceRedownload) {
         await DatabaseHelper.closeAll();
-        for (final lang in [widget.learnLang, widget.nativeLang]) {
-          try {
-            final path = await LangDbService.localPath(lang);
-            final f = File(path);
-            if (f.existsSync()) f.deleteSync();
-          } catch (_) {}
+        try {
+          final path = await LangDbService.localPathPair(
+              widget.learnLang, widget.nativeLang);
+          final f = File(path);
+          if (f.existsSync()) f.deleteSync();
+        } catch (_) {}
+      }
+
+      final asrWarmup = TalkAsrService.warmupForLanguages(
+          [widget.learnLang, widget.nativeLang]);
+
+      // ── Download combined DB ──
+      final alreadyExists = await LangDbService.isDownloadedPair(
+          widget.learnLang, widget.nativeLang);
+      if (!alreadyExists) {
+        if (!SupabaseVocabHydrator.isAvailable) {
+          throw Exception(
+            'Cloud vocabulary service is not configured.\n\n'
+            'Add your Supabase anon (public) key to assets/supabase_config.json '
+            '("anon_key"), then rebuild — or build with '
+            'scripts/flutter_build_apk_with_secrets.ps1 '
+            '(or flutter run with --dart-define=SUPABASE_ANON_KEY=... / '
+            'supabase_anon_key.txt for dev).',
+          );
         }
-      }
-
-      // ── Download learn lang DB ──
-      final learnAlreadyExists =
-          await LangDbService.isDownloaded(widget.learnLang);
-      if (!learnAlreadyExists) {
-        setState(() => _message = 'Downloading $learnLabel...');
-        await LangDbService.download(
-          widget.learnLang,
-          cancelToken: _cancel,
-          onProgress: (r, t) {
-            if (t > 0) setState(() => _progress1 = r / t);
+        setState(() => _message = nativeL.isZhCN || nativeL.isZhTW
+            ? '正从云端加载词库…'
+            : 'Loading dictionary from cloud…');
+        await SupabaseVocabHydrator.hydrateToLocalFile(
+          translateLang: widget.learnLang,
+          nativeLang: widget.nativeLang,
+          onStatus: (m) {
+            if (mounted) setState(() => _message = m);
           },
         );
       }
-      setState(() => _progress1 = 1.0);
+      setState(() => _progressDb = 1.0);
 
-      // ── Download native lang DB ──
-      final nativeAlreadyExists =
-          await LangDbService.isDownloaded(widget.nativeLang);
-      if (!nativeAlreadyExists) {
-        setState(() => _message = 'Downloading $nativeLabel...');
-        await LangDbService.download(
-          widget.nativeLang,
-          cancelToken: _cancel,
-          onProgress: (r, t) {
-            if (t > 0) setState(() => _progress2 = r / t);
-          },
-        );
-      }
-      setState(() => _progress2 = 1.0);
-
-      // ── Download photo DB ──
+      // ── Download photo DB (optional; GitHub may rate-limit) ──
       final photoAlreadyExists = await LangDbService.isPhotoDbDownloaded();
       if (!photoAlreadyExists) {
-        setState(() => _message = 'Downloading photos...');
-        await LangDbService.downloadPhotoDb(
-          cancelToken: _cancel,
-          onProgress: (r, t) {
-            if (t > 0) setState(() => _progress3 = r / t);
-          },
-        );
+        setState(() => _message = nativeL.isZhCN || nativeL.isZhTW
+            ? '正在下载图片词库...'
+            : 'Downloading photos database...');
+        try {
+          await LangDbService.downloadPhotoDb(
+            cancelToken: _cancel,
+            onProgress: (r, t) {
+              if (t > 0) setState(() => _progressPhoto = r / t);
+            },
+          );
+        } catch (_) {
+          // Illustrated index is optional; per-word images can load from CDN paths.
+          if (mounted) {
+            setState(() => _message = nativeL.isZhCN || nativeL.isZhTW
+                ? '图片词库跳过（可选）'
+                : 'Photo index skipped (optional).');
+          }
+        }
       }
-      setState(() => _progress3 = 1.0);
+      setState(() => _progressPhoto = 1.0);
 
-      // ── Open databases ──
-      setState(() => _message = 'Loading databases...');
+      // ── Open database ──
+      setState(() => _message = nativeL.isZhCN || nativeL.isZhTW
+          ? '正在载入词库...'
+          : 'Loading database...');
       await DatabaseHelper.openWithLangs(widget.learnLang, widget.nativeLang);
 
-      // ── Verify databases have content ──
-      final learnCount  = await DatabaseHelper.wordCount();
-      final nativeCount = await DatabaseHelper.wordCountNative();
-      if (learnCount == 0) {
-        // Delete so next launch re-downloads
-        final path = await LangDbService.localPath(widget.learnLang);
+      // ── Verify database has content ──
+      final count = await DatabaseHelper.wordCount();
+      if (count == 0) {
+        final path = await LangDbService.localPathPair(
+            widget.learnLang, widget.nativeLang);
         try { File(path).deleteSync(); } catch (_) {}
         throw Exception(
-            '$learnLabel database contains no words.\n'
+            '$pairLabel database contains no words.\n'
             'Please upload word data to the repository.');
       }
-      if (nativeCount == 0) {
-        final path = await LangDbService.localPath(widget.nativeLang);
-        try { File(path).deleteSync(); } catch (_) {}
-        throw Exception(
-            '$nativeLabel database contains no words.\n'
-            'Please upload word data to the repository.');
-      }
+
+      try {
+        await asrWarmup;
+      } catch (_) {}
 
       setState(() {
         _status = _DownloadStatus.done;
         _message = 'Done!';
       });
     } catch (e) {
-      // Clean up any partial/empty files so retry forces re-download
       try {
-        final p1 = await LangDbService.localPath(widget.learnLang);
-        if (File(p1).existsSync()) File(p1).deleteSync();
-      } catch (_) {}
-      try {
-        final p2 = await LangDbService.localPath(widget.nativeLang);
-        if (File(p2).existsSync()) File(p2).deleteSync();
+        final path = await LangDbService.localPathPair(
+            widget.learnLang, widget.nativeLang);
+        if (File(path).existsSync()) File(path).deleteSync();
       } catch (_) {}
       if (!mounted) return;
       setState(() {
@@ -422,6 +560,7 @@ class _LangDbDownloadDialogState extends State<_LangDbDownloadDialog> {
   @override
   Widget build(BuildContext context) {
     final l = L10n(AppLangNotifier().uiLang);
+    final nativeL = L10n(widget.nativeLang);
     final learnLabel  = _langLabel(widget.learnLang);
     final nativeLabel = _langLabel(widget.nativeLang);
     final isDone  = _status == _DownloadStatus.done;
@@ -433,7 +572,7 @@ class _LangDbDownloadDialogState extends State<_LangDbDownloadDialog> {
         const SizedBox(width: 8),
         Expanded(
           child: Text(
-            isDone ? 'Download Complete' : 'Downloading Databases',
+            isDone ? nativeL.downloadSuccess : 'Downloading Database',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
@@ -456,14 +595,24 @@ class _LangDbDownloadDialogState extends State<_LangDbDownloadDialog> {
               const Icon(Icons.check_circle_outline,
                   color: Color(0xFF2E7D32), size: 48),
               const SizedBox(height: 8),
-              const Text('Both databases are ready.',
+              Text('$learnLabel / $nativeLabel database is ready.',
                   textAlign: TextAlign.center),
+              const SizedBox(height: 16),
+              Center(
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF1565C0),
+                  ),
+                  child: Text(nativeL.continueLabel),
+                ),
+              ),
             ] else ...[
-              _ProgressRow(label: learnLabel,  progress: _progress1),
+              _ProgressRow(
+                  label: '$learnLabel / $nativeLabel',
+                  progress: _progressDb),
               const SizedBox(height: 12),
-              _ProgressRow(label: nativeLabel, progress: _progress2),
-              const SizedBox(height: 12),
-              _ProgressRow(label: 'Photos',    progress: _progress3),
+              _ProgressRow(label: 'Photos', progress: _progressPhoto),
               if (_message.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Text(_message,
@@ -476,13 +625,6 @@ class _LangDbDownloadDialogState extends State<_LangDbDownloadDialog> {
         ),
       ),
       actions: [
-        if (isDone)
-          FilledButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF1565C0)),
-            child: const Text('OK'),
-          ),
         if (isError)
           FilledButton(
             onPressed: _startDownload,

@@ -1,9 +1,10 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'database_helper.dart';
 import 'translate_service.dart';
 import 'edge_tts_service.dart';
 import 'language_prefs.dart';
 import 'recording_dialog.dart';
+import 'help_tooltip.dart';
 
 class AddWordPage extends StatefulWidget {
   const AddWordPage({super.key});
@@ -46,9 +47,6 @@ class _AddWordPageState extends State<AddWordPage> {
     if (mounted) {
       setState(() {
         _categories = cats;
-        if (_selectedCategoryId == null && cats.isNotEmpty) {
-          _selectedCategoryId = cats.first.id;
-        }
       });
     }
   }
@@ -173,7 +171,7 @@ class _AddWordPageState extends State<AddWordPage> {
       });
     } else {
       final existing = _categories.firstWhere(
-        (c) => c.name.toLowerCase() == name.toLowerCase(),
+        (c) => c.nameNative.toLowerCase() == name.toLowerCase(),
         orElse: () => _categories.first,
       );
       setState(() {
@@ -206,9 +204,9 @@ class _AddWordPageState extends State<AddWordPage> {
     if (_selectedCategoryId != null) {
       final cat = _categories.firstWhere(
         (c) => c.id == _selectedCategoryId,
-        orElse: () => CategoryEntry(name: ''),
+        orElse: () => CategoryEntry(nameNative: ''),
       );
-      catNameForCheck = cat.name;
+      catNameForCheck = cat.nameNative;
     }
 
     final dup = await DatabaseHelper.exists(thai, chinese, catNameForCheck);
@@ -353,7 +351,7 @@ class _AddWordPageState extends State<AddWordPage> {
                 SizedBox(
                   width: 48,
                   height: 50,
-                  child: Tooltip(
+                  child: HelpTooltip(
                     message: isEn ? 'Record native audio' : '录制母语发音',
                     child: ElevatedButton(
                       onPressed: _recordNative,
@@ -434,7 +432,7 @@ class _AddWordPageState extends State<AddWordPage> {
                 SizedBox(
                   width: 48,
                   height: 50,
-                  child: Tooltip(
+                  child: HelpTooltip(
                     message: isEn ? 'Record translation audio' : '录制翻译发音',
                     child: ElevatedButton(
                       onPressed: _recordTranslation,
@@ -519,8 +517,9 @@ class _AddWordPageState extends State<AddWordPage> {
                                  : (isTW ? '暫無類別' : '暂无类别'),
                             style: const TextStyle(color: Colors.grey),
                           )
-                        : DropdownButtonFormField<int>(
+                        : DropdownButtonFormField<int?>(
                             value: _selectedCategoryId,
+                            hint: const Text('Select category…'),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8)),
@@ -528,7 +527,7 @@ class _AddWordPageState extends State<AddWordPage> {
                                   horizontal: 12, vertical: 12),
                             ),
                             items: _categories
-                                .map((c) => DropdownMenuItem(
+                                .map((c) => DropdownMenuItem<int?>(
                                       value: c.id,
                                       child: Text(c.name),
                                     ))
